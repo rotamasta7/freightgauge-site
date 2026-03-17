@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services — FreightGauge</title>
+  <meta name="description" content="The FreightGauge Shipping Health Check — $299 AUD. Full scope, deliverables, and what's included.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .scope-row {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      padding: 28px 0;
+      align-items: start;
+    }
+    .scope-row:first-child { padding-top: 0; }
+    .scope-row:last-child { border-bottom: none; }
+    .scope-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      padding-top: 3px;
+    }
+    .scope-content h4 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .scope-content p { font-size: 14px; line-height: 1.65; }
+
+    .check-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .check-list li {
+      display: flex;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--ink-muted);
+      align-items: flex-start;
+    }
+    .check-list li::before {
+      content: '✓';
+      color: var(--fg-acc);
+      font-weight: 700;
+      font-size: 13px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .not-included-list li::before {
+      content: '—';
+      color: var(--ink-faint);
+    }
+
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .analysis-item {
+      background: var(--white);
+      padding: 28px 32px;
+    }
+    .analysis-item h4 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .analysis-item p { font-size: 13px; }
+    .analysis-num {
+      font-family: 'Instrument Serif', serif;
+      font-size: 32px;
+      color: var(--fg-light);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .analysis-num span { color: var(--fg-acc); }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 24px 0;
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .faq-a { font-size: 14px; }
+
+    .sticky-cta {
+      position: sticky;
+      top: calc(var(--nav-h) + 24px);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+    }
+    .sticky-price {
+      font-family: 'Instrument Serif', serif;
+      font-size: 52px;
+      color: var(--fg-dark);
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .sticky-price sup { font-size: 22px; vertical-align: super; }
+
+    @media (max-width: 768px) {
+      .scope-row { grid-template-columns: 1fr; gap: 4px; }
+      .analysis-grid { grid-template-columns: 1fr; }
+      .services-layout { grid-template-columns: 1fr !important; }
+      .sticky-cta { position: static; margin-top: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <span class="nav-brand-dot"></span>FreightGauge
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="services.html" class="nav-link active">Services</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="contact.html" class="nav-cta nav-link">Get started</a>
+    </div>
+    <div class="nav-burger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="mobile-nav">
+  <a href="index.html">Home</a>
+  <a href="services.html">Services</a>
+  <a href="about.html">About</a>
+  <a href="contact.html" class="nav-cta">Get started</a>
+</div>
+
+<div class="page">
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="label label-green fade-up" style="margin-bottom:16px;">Services</div>
+      <h1 class="fade-up fade-up-delay-1" style="max-width:600px;">The Shipping<br>Health Check</h1>
+      <p class="fade-up fade-up-delay-2" style="font-size:18px; max-width:520px; margin-top:16px; font-weight:300;">A complete, independent analysis of your freight spend — delivered in 48 to 72 hours, with no calls required.</p>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <section class="section">
+    <div class="container">
+      <div class="services-layout" style="display:grid; grid-template-columns: 1fr 300px; gap: 80px; align-items: start;">
+
+        <!-- LEFT: FULL SCOPE -->
+        <div>
+
+          <!-- WHAT WE ANALYSE -->
+          <div class="fade-up" style="margin-bottom: 64px;">
+            <h2 style="margin-bottom:8px;">What we analyse</h2>
+            <p style="margin-bottom:40px;">We work from your carrier invoice, shipment records, and order data to build a consignment-level model of your freight spend. Here's what gets examined.</p>
+
+            <div class="analysis-grid">
+              <div class="analysis-item">
+                <div class="analysis-num"><span>01</span></div>
+                <h4>Cost breakdown</h4>
+                <p>Base charge, fuel surcharge, and all other surcharges — separated, quantified, and benchmarked as a percentage of total spend.</p>
+              </div>
+              <div class="analysis-item">
+                <div class="analysis-num"><span>02</span></div>
+                <h4>Weight & volumetric analysis</h4>
+                <p>Dead weight vs. volumetric weight vs. chargeable weight — per consignment. Flags where dimensional billing is driving cost.</p>
+              </div>
+              <div class="analysis-item">
+                <div class="analysis-num"><span>03</span></div>
+                <h4>Service & carrier mix</h4>
+                <p>How your volume splits across service tiers, carriers, and weight bands. Where you're over-servicing (Express where Standard would do).</p>
+              </div>
+              <div class="analysis-item">
+                <div class="analysis-num"><span>04</span></div>
+                <h4>Geographic spend profile</h4>
+                <p>Cost by state and postcode. Identifies expensive delivery zones that may warrant a free shipping threshold adjustment or zone surcharge review.</p>
+              </div>
+              <div class="analysis-item">
+                <div class="analysis-num"><span>05</span></div>
+                <h4>Shipping margin</h4>
+                <p>What you charged customers for shipping vs. what it cost — per order, in aggregate, and as a percentage of total order value. Quantifies your free shipping subsidy.</p>
+              </div>
+              <div class="analysis-item">
+                <div class="analysis-num"><span>06</span></div>
+                <h4>Outlier identification</h4>
+                <p>Consignments with abnormally high costs, unexpected surcharges, or anomalous weight billing — flagged individually for review.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- DELIVERABLES -->
+          <div class="fade-up" style="margin-bottom: 64px;">
+            <h2 style="margin-bottom:8px;">What you receive</h2>
+            <p style="margin-bottom:32px;">Four deliverables, all included in the flat fee.</p>
+
+            <div class="scope-row">
+              <div class="scope-label">Dashboard</div>
+              <div class="scope-content">
+                <h4>Interactive Looker Studio dashboard</h4>
+                <p>A connected, filterable dashboard — filterable by date range, carrier, service tier, destination state, and weight band. Built on your data, shared with you to keep permanently. No login required to view.</p>
+                <ul class="check-list">
+                  <li>Overview: KPIs, spend trend, carrier & service mix</li>
+                  <li>Weight & service analysis: cost by weight band, pivot heatmaps</li>
+                  <li>Geographic spend: top 20 expensive postcodes, spend by state</li>
+                  <li>Surcharge breakdown: fuel vs. other, carrier comparison, time series</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="scope-row">
+              <div class="scope-label">Action plan</div>
+              <div class="scope-content">
+                <h4>Ranked recommendations — up to 10 items</h4>
+                <p>Each recommendation includes: the specific issue identified, the supporting evidence from your data, the recommended fix, an estimated monthly saving in AUD, and an effort rating. Framed as scenarios, never as directives — you decide what to act on and when.</p>
+              </div>
+            </div>
+
+            <div class="scope-row">
+              <div class="scope-label">Summary</div>
+              <div class="scope-content">
+                <h4>Written 1-page report</h4>
+                <p>A plain-language executive summary — key metrics, top 3 findings, top 3 recommendations, and data notes. Formatted to be forwarded to a business partner, carrier account manager, or operations team without context.</p>
+              </div>
+            </div>
+
+            <div class="scope-row">
+              <div class="scope-label">Walkthrough</div>
+              <div class="scope-content">
+                <h4>Optional Loom video</h4>
+                <p>Available on request — a short recorded walkthrough of your dashboard and findings. Useful if you prefer to digest analysis by watching rather than reading.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- DATA NEEDED -->
+          <div class="fade-up" style="margin-bottom: 64px;">
+            <h2 style="margin-bottom:8px;">What data we need from you</h2>
+            <p style="margin-bottom:24px;">You don't need to clean or reformat anything. We provide step-by-step export guides for every major platform.</p>
+            <ul class="check-list">
+              <li><strong>Carrier invoice</strong> — CSV or Excel from AusPost, Allied, Sendle, or similar. Ideally 3+ months.</li>
+              <li><strong>Shipment records</strong> — Article-level export from Starshippit, Machship, or similar (dimensions + dead weight per carton).</li>
+              <li><strong>Orders data</strong> — Optional but recommended. Export from Shopify, WooCommerce, or similar. Used to calculate shipping margin.</li>
+            </ul>
+            <p style="margin-top:16px; font-size:14px;">Export guides available for: AusPost MyPost Business · Shopify · Starshippit · Machship · WooCommerce</p>
+          </div>
+
+          <!-- NOT INCLUDED -->
+          <div class="fade-up" style="margin-bottom: 64px;">
+            <h2 style="margin-bottom:8px;">What's not included</h2>
+            <p style="margin-bottom:24px;">FreightGauge is a productised service with a fixed scope. These things are out of scope at the $299 tier.</p>
+            <ul class="check-list not-included-list">
+              <li>Carrier contract negotiation on your behalf</li>
+              <li>Implementation of recommendations</li>
+              <li>Ongoing monitoring or retainer-based reporting</li>
+              <li>Multi-carrier RFQ or tender management</li>
+              <li>Platform integrations or API work</li>
+            </ul>
+            <p style="margin-top:16px; font-size:14px; color:var(--ink-faint);">Need something beyond this scope? <a href="contact.html" style="color:var(--fg-mid); font-weight:500;">Get in touch</a> and we can discuss.</p>
+          </div>
+
+          <!-- FAQ -->
+          <div class="fade-up">
+            <h2 style="margin-bottom:32px;">Common questions</h2>
+
+            <div class="faq-item">
+              <div class="faq-q">How do I send you my data?</div>
+              <div class="faq-a"><p>Via email after you get in touch. We'll confirm what we need and you send the files directly — no upload portal, no login. All data is handled securely and used only for your analysis.</p></div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-q">What if I don't have shipment dimension data?</div>
+              <div class="faq-a"><p>The analysis still runs — we note the gap and flag what can't be calculated (volumetric weight, chargeable weight basis, bulky flag). We'll tell you exactly what you're missing out on by not having it, which is often useful in itself.</p></div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-q">Do I need to be an AusPost customer?</div>
+              <div class="faq-a"><p>No. FreightGauge works with any Australian domestic carrier — AusPost, Allied Express, Sendle, TNT, Couriers Please, and others. If you use multiple carriers, we can analyse all of them together.</p></div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-q">How much data do I need?</div>
+              <div class="faq-a"><p>A minimum of one month's invoice data to produce meaningful findings. Three months is ideal — it gives enough volume to identify trends and remove anomalies. If your business is seasonal, include the peak period.</p></div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-q">Is GST included in the price?</div>
+              <div class="faq-a"><p>No — $299 is ex-GST. FreightGauge is not currently GST registered, so no GST applies at this time.</p></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: STICKY CTA -->
+        <div>
+          <div class="sticky-cta fade-up">
+            <div class="label label-green" style="margin-bottom:16px;">Shipping Health Check</div>
+            <div class="pricing-price sticky-price"><sup>$</sup>299</div>
+            <div style="font-size:13px; color:var(--ink-faint); margin-top:4px; margin-bottom:20px; font-weight:500;">AUD · ex. GST</div>
+            <div style="border-top:1px solid var(--border); padding-top:20px; margin-bottom:20px;">
+              <ul class="check-list" style="gap:8px;">
+                <li>Looker Studio dashboard</li>
+                <li>Ranked action plan</li>
+                <li>1-page written summary</li>
+                <li>Optional Loom walkthrough</li>
+                <li>48–72hr turnaround</li>
+                <li>No calls required</li>
+              </ul>
+            </div>
+            <a href="contact.html" class="btn btn-primary" style="width:100%; justify-content:center;">Get started →</a>
+            <p style="font-size:12px; color:var(--ink-faint); text-align:center; margin-top:12px;">No commitment until you're ready to proceed.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">FreightGauge</div>
+      <div class="footer-tagline">Your last-mile health check — made simple.</div>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">© 2025 FreightGauge · ABN [YOUR ABN] · freightgauge.net · hello@freightgauge.net</div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>

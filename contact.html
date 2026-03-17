@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Started — FreightGauge</title>
+  <meta name="description" content="Get in touch to start your FreightGauge shipping health check.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 96px;
+      align-items: start;
+    }
+
+    .process-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .process-step {
+      display: flex;
+      gap: 20px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .process-step:last-child { border-bottom: none; }
+    .ps-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--fg-dark);
+      color: white;
+      font-family: 'Instrument Serif', serif;
+      font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .ps-body h4 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .ps-body p { font-size: 14px; }
+    .ps-time {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--fg-acc);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    /* Contact card */
+    .contact-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      position: sticky;
+      top: calc(var(--nav-h) + 24px);
+    }
+    .contact-card-header {
+      background: var(--fg-dark);
+      padding: 32px;
+    }
+    .contact-card-header h3 {
+      font-family: 'Instrument Serif', serif;
+      color: white;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    .contact-card-header p {
+      color: rgba(255,255,255,0.6);
+      font-size: 14px;
+    }
+    .contact-card-body {
+      padding: 32px;
+    }
+
+    .contact-email-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      background: var(--fg-xlight);
+      border: 1.5px solid var(--fg-acc);
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: all 0.15s;
+      margin-bottom: 16px;
+    }
+    .contact-email-btn:hover {
+      background: var(--fg-light);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(67,160,71,0.15);
+    }
+    .contact-email-icon {
+      width: 40px; height: 40px;
+      background: var(--fg-dark);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
+    }
+    .contact-email-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 2px;
+    }
+    .contact-email-address {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--fg-dark);
+    }
+
+    .contact-linkedin-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 20px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .contact-linkedin-btn:hover { border-color: #0077b5; background: #f0f7ff; }
+    .li-icon {
+      width: 32px; height: 32px;
+      background: #0077b5;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+      font-family: serif;
+    }
+    .contact-note {
+      font-size: 12px;
+      color: var(--ink-faint);
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      line-height: 1.6;
+    }
+
+    .what-to-include {
+      background: var(--fg-xlight);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-top: 20px;
+    }
+    .what-to-include h4 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--fg-dark);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .include-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .include-list li {
+      font-size: 13px;
+      color: var(--ink-muted);
+      display: flex;
+      gap: 8px;
+    }
+    .include-list li::before {
+      content: '→';
+      color: var(--fg-acc);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 768px) {
+      .contact-layout { grid-template-columns: 1fr; gap: 48px; }
+      .contact-card { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <span class="nav-brand-dot"></span>FreightGauge
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="services.html" class="nav-link">Services</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="contact.html" class="nav-cta nav-link active">Get started</a>
+    </div>
+    <div class="nav-burger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="mobile-nav">
+  <a href="index.html">Home</a>
+  <a href="services.html">Services</a>
+  <a href="about.html">About</a>
+  <a href="contact.html" class="nav-cta">Get started</a>
+</div>
+
+<div class="page">
+
+  <div class="page-hero">
+    <div class="container">
+      <div class="label label-green fade-up" style="margin-bottom:16px;">Get started</div>
+      <h1 class="fade-up fade-up-delay-1" style="max-width:520px;">Let's look at your shipping costs</h1>
+      <p class="fade-up fade-up-delay-2" style="font-size:18px; max-width:480px; margin-top:16px; font-weight:300;">Send us an email and we'll take it from there. No forms, no calls, no pressure.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="contact-layout">
+
+        <!-- LEFT: PROCESS -->
+        <div>
+          <div class="fade-up" style="margin-bottom:48px;">
+            <h2 style="margin-bottom:8px;">What happens after you reach out</h2>
+            <p style="margin-bottom:40px;">The whole process is asynchronous — no calls required unless you want one.</p>
+            <div class="process-steps">
+              <div class="process-step">
+                <div class="ps-num">1</div>
+                <div class="ps-body">
+                  <div class="ps-time">Day 0</div>
+                  <h4>You send us an email</h4>
+                  <p>Tell us a bit about your business — what platform you're on, which carrier you use, and roughly how many orders you ship per month. No need to attach any files yet.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="ps-num">2</div>
+                <div class="ps-body">
+                  <div class="ps-time">Within 24 hours</div>
+                  <h4>We confirm scope and send export guides</h4>
+                  <p>We'll reply with a quick scope confirmation, your tailored data export guides, and a link to pay once you're ready to proceed. Nothing starts until you confirm.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="ps-num">3</div>
+                <div class="ps-body">
+                  <div class="ps-time">You send data</div>
+                  <h4>You export and send your files</h4>
+                  <p>Carrier invoice, shipment records, and orders export — all by email. The export guides walk you through it step by step. Most people have it done in under 20 minutes.</p>
+                </div>
+              </div>
+              <div class="process-step">
+                <div class="ps-num">4</div>
+                <div class="ps-body">
+                  <div class="ps-time">48–72 hours</div>
+                  <h4>We deliver your report</h4>
+                  <p>Dashboard link, action plan, and 1-page summary — all delivered by email. If you'd like a Loom walkthrough, just ask and we'll include it at no extra cost.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- IS IT RIGHT FOR ME -->
+          <div class="fade-up">
+            <h2 style="margin-bottom:16px;">Is FreightGauge right for your business?</h2>
+            <p style="margin-bottom:16px; font-size:15px;">FreightGauge works best for Australian ecommerce businesses that:</p>
+            <ul class="check-list" style="margin-bottom:16px;">
+              <li>Ship at least 50–100 parcels per month</li>
+              <li>Use AusPost, Allied Express, Sendle, or a similar domestic carrier</li>
+              <li>Have access to a carrier invoice in CSV or Excel format</li>
+              <li>Want to understand their freight spend before approaching a carrier for a rate review</li>
+              <li>Are growing and starting to feel the weight of shipping costs on margins</li>
+            </ul>
+            <p style="font-size:14px; color:var(--ink-faint);">Not sure if it's right for you? Email us anyway — happy to give you an honest answer before any money changes hands.</p>
+          </div>
+        </div>
+
+        <!-- RIGHT: CONTACT CARD -->
+        <div class="fade-up fade-up-delay-1">
+          <div class="contact-card">
+            <div class="contact-card-header">
+              <h3>Get in touch</h3>
+              <p>Reach out by email or LinkedIn — whichever is easier for you.</p>
+            </div>
+            <div class="contact-card-body">
+              <a href="mailto:hello@freightgauge.net?subject=FreightGauge%20Health%20Check%20Enquiry" class="contact-email-btn">
+                <div class="contact-email-icon">✉️</div>
+                <div>
+                  <div class="contact-email-label">Email us</div>
+                  <div class="contact-email-address">hello@freightgauge.net</div>
+                </div>
+              </a>
+              <a href="https://linkedin.com/company/freightgauge" target="_blank" class="contact-linkedin-btn">
+                <div class="li-icon">in</div>
+                <div>
+                  <div style="font-size:13px; font-weight:600; color:var(--ink);">FreightGauge on LinkedIn</div>
+                  <div style="font-size:12px; color:var(--ink-muted);">Message us directly</div>
+                </div>
+              </a>
+
+              <div class="what-to-include">
+                <h4>What to include in your email</h4>
+                <ul class="include-list">
+                  <li>Your business name and website</li>
+                  <li>Which carrier(s) you use</li>
+                  <li>Your ecommerce platform (Shopify, WooCommerce, etc.)</li>
+                  <li>Rough monthly order volume</li>
+                  <li>What you're hoping to get out of the analysis</li>
+                </ul>
+              </div>
+
+              <div class="contact-note">
+                <strong>Turnaround:</strong> We aim to respond to all enquiries within one business day.<br><br>
+                <strong>Pricing:</strong> $299 AUD ex. GST · Fixed scope · No ongoing commitment.<br><br>
+                All data you share is used solely for the purpose of completing your analysis and handled securely.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">FreightGauge</div>
+      <div class="footer-tagline">Your last-mile health check — made simple.</div>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">© 2025 FreightGauge · ABN [YOUR ABN] · freightgauge.net · hello@freightgauge.net</div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
