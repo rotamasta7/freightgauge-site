@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Services — FreightGauge</title>
-  <meta name="description" content="Three tiers of AI-powered freight analysis for Australian ecommerce. Lite from $499, Standard from $1,750, Premium from $3,500. Delivered in 48–72 hours.">
+  <meta name="description" content="Three tiers of AI-powered freight analysis for Australian ecommerce. Lite from $499, Standard $1,750, Premium $3,500. Delivered in 48 to 72 hours.">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
@@ -53,23 +53,29 @@
     }
     .tier-name {
       font-family: 'DM Sans', sans-serif;
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: var(--ink-faint);
-      margin-bottom: 16px;
+      color: var(--ink-muted);
+      margin-bottom: 14px;
     }
     .tier-card.featured .tier-name { color: var(--fg-mid); }
     .tier-price {
-      font-family: 'Instrument Serif', serif;
-      font-size: 52px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 56px;
+      font-weight: 700;
       color: var(--fg-dark);
       line-height: 1;
       letter-spacing: -2px;
       margin-bottom: 4px;
     }
-    .tier-price sup { font-size: 22px; vertical-align: super; letter-spacing: 0; }
+    .tier-price sup {
+      font-size: 24px;
+      font-weight: 600;
+      vertical-align: super;
+      letter-spacing: 0;
+    }
     .tier-price-note { font-size: 12px; color: var(--ink-faint); font-weight: 500; margin-bottom: 8px; }
     .tier-tagline {
       font-size: 14px;
@@ -121,8 +127,6 @@
       flex-shrink: 0;
       margin-top: 2px;
     }
-    .tier-includes li.dimmed { color: var(--ink-faint); }
-    .tier-includes li.dimmed::before { content: '\2014'; color: var(--border); }
     .analysis-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -182,8 +186,8 @@
   <div class="page-hero">
     <div class="container">
       <div class="label label-green fade-up" style="margin-bottom:16px;">Services</div>
-      <h1 class="fade-up fade-up-delay-1" style="max-width:640px;">Your shipping data.<br>Analysed in days.</h1>
-      <p class="fade-up fade-up-delay-2" style="font-size:18px; max-width:540px; margin-top:16px; font-weight:300;">Three tiers of AI-powered freight analysis. Fixed fee, fast turnaround, no calls required. Send your data — get back a clear picture of where your money goes and exactly what to do about it.</p>
+      <h1 class="fade-up fade-up-delay-1" style="max-width:640px;">Your shipping data,<br>analysed in days.</h1>
+      <p class="fade-up fade-up-delay-2" style="font-size:18px; max-width:540px; margin-top:16px; font-weight:300;">Three tiers of AI-powered freight analysis. Fixed fee, fast turnaround, no calls unless you want one. Send your data and get back a clear picture of where the money goes and what to fix.</p>
     </div>
   </div>
 
@@ -191,18 +195,19 @@
     <div class="container">
       <div style="text-align:center; margin-bottom:56px;" class="fade-up">
         <h2 style="margin-bottom:12px;">Choose your tier</h2>
-        <p style="max-width:500px; margin:0 auto; color:var(--ink-muted);">All tiers use the same AI analysis engine. The difference is depth — how many angles get covered, how detailed the output is, and what tools you get to act on the findings.</p>
+        <p style="max-width:480px; margin:0 auto; color:var(--ink-muted);">All three tiers run through the same analysis engine. What changes is how deep it goes, how detailed the output is, and what tools you get to act on the findings.</p>
       </div>
 
       <div class="tiers-grid fade-up fade-up-delay-1">
 
+        <!-- LITE -->
         <div class="tier-card">
           <div class="tier-name">Lite</div>
           <div class="tier-price"><sup>$</sup>499</div>
           <div class="tier-price-note">AUD &middot; ex. GST</div>
-          <p class="tier-tagline">The essential snapshot. Key metrics, top findings, and the three highest-impact things to fix.</p>
+          <p class="tier-tagline">The essentials. Key numbers, top findings, and the three things most worth fixing.</p>
           <div class="tier-best-for">Best for</div>
-          <p class="tier-fit">Merchants shipping under $3k/month, or anyone who wants a clear read before committing to a deeper engagement.</p>
+          <p class="tier-fit">Merchants spending under $3k/month on freight. Good starting point if you want a clear picture before going deeper.</p>
           <div class="tier-turnaround">Delivered within 48 hours</div>
           <ul class="tier-includes">
             <li>2-page written summary with key metrics and top 3 findings</li>
@@ -210,62 +215,56 @@
             <li>Overview Looker Studio dashboard (1 page)</li>
             <li>Cost breakdown: base freight, fuel surcharge, other</li>
             <li>Carrier and service level split</li>
-            <li class="dimmed">Full 5-page Looker Studio dashboard</li>
-            <li class="dimmed">Geographic spend analysis</li>
-            <li class="dimmed">Weight and dimensional analysis</li>
-            <li class="dimmed">Rate card benchmarking</li>
-            <li class="dimmed">Carrier negotiation scripts</li>
           </ul>
           <a href="contact.html" class="btn btn-outline" style="width:100%; justify-content:center;">Get started</a>
         </div>
 
+        <!-- STANDARD -->
         <div class="tier-card featured">
           <div class="tier-badge">Most popular</div>
           <div class="tier-name">Standard</div>
           <div class="tier-price"><sup>$</sup>1,750</div>
           <div class="tier-price-note">AUD &middot; ex. GST</div>
-          <p class="tier-tagline">The full picture. Every angle of your freight spend, benchmarked and ranked by financial impact.</p>
+          <p class="tier-tagline">The full picture. Every angle of your freight spend benchmarked, quantified, and ranked by what saves the most money.</p>
           <div class="tier-best-for">Best for</div>
-          <p class="tier-fit">Merchants shipping $3k&ndash;$15k/month who want a complete audit and a prioritised action plan they can run with.</p>
+          <p class="tier-fit">Merchants spending $3k to $15k/month on freight who want the complete audit with a prioritised action plan they can run with.</p>
           <div class="tier-turnaround">Delivered within 3 business days</div>
           <ul class="tier-includes">
-            <li>10&ndash;15 page written report with full findings</li>
-            <li>Up to 10 ranked recommendations &mdash; savings estimate and effort rating each</li>
+            <li>10 to 15 page written report with full findings</li>
+            <li>Up to 10 ranked recommendations, each with a savings estimate and effort rating</li>
             <li>Full 5-page Looker Studio dashboard (cost, carriers, geography, weight, conversion)</li>
             <li>Cost breakdown: base freight, fuel surcharge, other surcharges</li>
             <li>Carrier and service level split</li>
-            <li>Geographic spend &mdash; state breakdown and top 20 most expensive postcodes</li>
-            <li>Weight and dimensional analysis &mdash; DIM billing and oversize flags</li>
-            <li>Shipping margin analysis &mdash; what you charged vs what it cost</li>
+            <li>Geographic spend: state breakdown and top 20 most expensive postcodes</li>
+            <li>Weight and dimensional analysis: DIM billing and oversize flags</li>
+            <li>Shipping margin: what you charged vs what it cost</li>
             <li>Optional Loom walkthrough on request</li>
-            <li class="dimmed">Rate card benchmarking</li>
-            <li class="dimmed">Carrier negotiation scripts</li>
-            <li class="dimmed">60-day email support</li>
           </ul>
           <a href="contact.html" class="btn btn-primary" style="width:100%; justify-content:center;">Get started</a>
         </div>
 
+        <!-- PREMIUM -->
         <div class="tier-card">
           <div class="tier-name">Premium</div>
           <div class="tier-price"><sup>$</sup>3,500</div>
           <div class="tier-price-note">AUD &middot; ex. GST</div>
-          <p class="tier-tagline">The full audit plus the tools to act on it &mdash; including rate benchmarks and negotiation scripts ready to send.</p>
+          <p class="tier-tagline">Everything in Standard, plus the rate benchmarks and carrier scripts to move straight from findings into negotiation.</p>
           <div class="tier-best-for">Best for</div>
-          <p class="tier-fit">Merchants shipping $15k+/month, or anyone who wants to go beyond findings and straight into implementation.</p>
+          <p class="tier-fit">Merchants spending over $15k/month on freight, or anyone who wants to move from findings straight into implementation.</p>
           <div class="tier-turnaround">Delivered within 5 business days</div>
           <ul class="tier-includes">
             <li>Everything in Standard</li>
-            <li>Carrier rate card benchmarking &mdash; your rates vs current market</li>
-            <li>Free shipping threshold modelling with specific AOV recommendation and projected uplift</li>
-            <li>Carrier negotiation email scripts &mdash; ready to send to your account manager</li>
-            <li>60-day email support post-delivery</li>
+            <li>Carrier rate card benchmarking: your rates vs what the market's paying</li>
+            <li>Free shipping threshold modelling with a specific AOV recommendation and projected conversion uplift</li>
+            <li>Carrier negotiation scripts you can send straight to your account manager</li>
+            <li>60-day email support after delivery</li>
           </ul>
           <a href="contact.html" class="btn btn-outline" style="width:100%; justify-content:center;">Get started</a>
         </div>
 
       </div>
 
-      <p class="fade-up" style="text-align:center; font-size:13px; color:var(--ink-faint); margin-top:32px;">Not sure which tier is right? <a href="contact.html" style="color:var(--fg-mid); font-weight:500;">Get in touch</a> and we will point you in the right direction based on your freight spend.</p>
+      <p class="fade-up" style="text-align:center; font-size:13px; color:var(--ink-faint); margin-top:32px;">Not sure? <a href="contact.html" style="color:var(--fg-mid); font-weight:500;">Get in touch</a> and we'll point you in the right direction.</p>
     </div>
   </section>
 
@@ -275,38 +274,38 @@
     <div class="container">
       <div class="fade-up" style="margin-bottom:48px;">
         <h2 style="margin-bottom:12px;">What gets analysed</h2>
-        <p style="max-width:560px;">Our AI analysis engine works from your carrier invoice, shipment records, and order data to build a consignment-level model of your entire freight spend.</p>
+        <p style="max-width:560px;">The analysis runs from your carrier invoice, shipment records, and order data. It builds a consignment-level model of your freight spend so nothing gets averaged out or missed.</p>
       </div>
       <div class="analysis-grid fade-up fade-up-delay-1">
         <div class="analysis-item">
           <div class="analysis-num"><span>01</span></div>
           <h4>Cost breakdown</h4>
-          <p>Base charge, fuel surcharge, and all other surcharges &mdash; separated, quantified, and benchmarked as a percentage of total spend.</p>
+          <p>Base charge, fuel surcharge, and all other surcharges. Separated, quantified, and benchmarked as a share of total spend.</p>
         </div>
         <div class="analysis-item">
           <div class="analysis-num"><span>02</span></div>
           <h4>Weight and volumetric analysis</h4>
-          <p>Dead weight vs. volumetric weight vs. chargeable weight &mdash; per consignment. Flags where dimensional billing is driving cost.</p>
+          <p>Dead weight vs. volumetric weight vs. chargeable weight, per consignment. Flags where dimensional billing is quietly driving up costs.</p>
         </div>
         <div class="analysis-item">
           <div class="analysis-num"><span>03</span></div>
           <h4>Service and carrier mix</h4>
-          <p>How your volume splits across service tiers, carriers, and weight bands &mdash; and where you are over-servicing (Express where Standard would do).</p>
+          <p>How your volume splits across service tiers, carriers, and weight bands. Includes where you're over-servicing, like paying for Express when Standard would do.</p>
         </div>
         <div class="analysis-item">
           <div class="analysis-num"><span>04</span></div>
           <h4>Geographic spend profile</h4>
-          <p>Cost by state and postcode. Identifies expensive delivery zones that may warrant a free shipping threshold adjustment or zone surcharge review.</p>
+          <p>Cost by state and postcode. Identifies expensive delivery zones that may need a threshold adjustment or zone surcharge review.</p>
         </div>
         <div class="analysis-item">
           <div class="analysis-num"><span>05</span></div>
           <h4>Shipping margin</h4>
-          <p>What you charged customers for shipping vs. what it cost &mdash; per order, in aggregate, and as a percentage of total order value.</p>
+          <p>What you charged customers vs. what it actually cost. Per order, in aggregate, and as a share of total order value.</p>
         </div>
         <div class="analysis-item">
           <div class="analysis-num"><span>06</span></div>
           <h4>Outlier identification</h4>
-          <p>Consignments with abnormally high costs, unexpected surcharges, or anomalous weight billing &mdash; flagged individually for review.</p>
+          <p>Consignments with abnormally high costs, unexpected surcharges, or anomalous weight billing. Each one flagged for review.</p>
         </div>
       </div>
     </div>
@@ -318,21 +317,21 @@
     <div class="container" style="max-width:720px;">
       <div class="fade-up" style="margin-bottom:48px;">
         <h2 style="margin-bottom:12px;">What we need from you</h2>
-        <p>You do not need to clean or reformat anything. We provide step-by-step export guides for every major platform &mdash; just send the raw files.</p>
+        <p>You don't need to clean or reformat anything. We'll send step-by-step export guides. Just send the raw files.</p>
       </div>
       <div class="fade-up fade-up-delay-1">
         <div class="data-row">
           <div class="data-icon">&#128196;</div>
           <div>
             <h4>Carrier invoice &nbsp;<span style="font-weight:500; color:var(--fg-acc); font-family:'DM Sans'; font-size:12px;">Required</span></h4>
-            <p>CSV or Excel from AusPost, Couriers Please, Allied Express, or similar. Ideally 3+ months &mdash; one month minimum.</p>
+            <p>CSV or Excel from AusPost, Couriers Please, Allied Express, or similar. Ideally 3 months or more. One month is the minimum.</p>
           </div>
         </div>
         <div class="data-row">
           <div class="data-icon">&#128230;</div>
           <div>
             <h4>Shipment records &nbsp;<span style="font-weight:500; color:var(--ink-faint); font-family:'DM Sans'; font-size:12px;">Recommended</span></h4>
-            <p>Article-level export from Starshippit, Machship, or similar &mdash; dimensions and dead weight per carton. Required for volumetric analysis. Missing data is noted in the output.</p>
+            <p>Article-level export from Starshippit, Machship, or similar. Dimensions and dead weight per carton. Without this, the volumetric analysis can't run and we'll flag exactly what's missing.</p>
           </div>
         </div>
         <div class="data-row">
@@ -352,33 +351,34 @@
   <section class="section">
     <div class="container" style="max-width:720px;">
       <h2 class="fade-up" style="margin-bottom:40px;">Common questions</h2>
+
       <div class="faq-item fade-up">
         <div class="faq-q">Which tier is right for me?</div>
-        <div class="faq-a"><p>A rough guide: under $3k/month on freight, start with Lite. Spending $3k to $15k/month and want the full picture, choose Standard. Above $15k/month or ready to start negotiating with your carrier, go Premium. Not sure? <a href="contact.html" style="color:var(--fg-mid); font-weight:500;">Get in touch</a> and we will tell you honestly which one makes sense.</p></div>
+        <div class="faq-a"><p>Under $3k/month on freight: Lite. Between $3k and $15k and want the full picture: Standard. Over $15k/month, or you want to go straight to your carrier with a rate negotiation: Premium. Still not sure? <a href="contact.html" style="color:var(--fg-mid); font-weight:500;">Get in touch</a> and we'll tell you honestly.</p></div>
       </div>
       <div class="faq-item fade-up">
         <div class="faq-q">How do I send my data?</div>
-        <div class="faq-a"><p>Via email after you get in touch. We confirm exactly what we need, you send the files directly. No upload portal, no login. All data is handled securely and used only for your analysis.</p></div>
+        <div class="faq-a"><p>Via email once you've kicked things off. We'll confirm exactly what files we need, then you send them over. No portal, no login. Your data is used only for your analysis.</p></div>
       </div>
       <div class="faq-item fade-up">
-        <div class="faq-q">What if I do not have dimension data?</div>
-        <div class="faq-a"><p>The analysis still runs. We note the gap and flag what cannot be calculated &mdash; typically the volumetric weight and chargeable weight sections. We will tell you exactly what you are missing out on, which is often useful in itself.</p></div>
+        <div class="faq-q">What if I don't have dimension data?</div>
+        <div class="faq-a"><p>The analysis still runs. We flag what can't be calculated, typically the volumetric and chargeable weight sections. Knowing what's missing is useful on its own.</p></div>
       </div>
       <div class="faq-item fade-up">
         <div class="faq-q">Which carriers do you work with?</div>
-        <div class="faq-a"><p>Any Australian domestic carrier &mdash; AusPost, Allied Express, Couriers Please, TNT, StarTrack, and others. If you use multiple carriers, we can analyse all of them together.</p></div>
+        <div class="faq-a"><p>Any Australian domestic carrier. AusPost, Allied Express, Couriers Please, TNT, StarTrack, and others. Multiple carriers? We'll analyse all of them together.</p></div>
       </div>
       <div class="faq-item fade-up">
         <div class="faq-q">What does AI-powered mean in practice?</div>
-        <div class="faq-a"><p>FreightGauge uses AI to process, clean, and analyse your freight data at a consignment and article level &mdash; tasks that would take a human analyst days to do manually. The AI identifies patterns, flags outliers, calculates volumetric weight across every consignment, and surfaces findings ranked by financial impact. Every output is reviewed and validated before delivery.</p></div>
+        <div class="faq-a"><p>It processes and analyses your freight data at a consignment and article level. That's work that would take a human analyst a couple of days. It flags outliers, calculates volumetric weight across every shipment, and ranks findings by financial impact. Everything gets reviewed before it goes out.</p></div>
       </div>
       <div class="faq-item fade-up">
         <div class="faq-q">Is GST included in the prices?</div>
-        <div class="faq-a"><p>No &mdash; all prices shown are ex-GST. FreightGauge is not currently GST registered, so no GST applies at this time.</p></div>
+        <div class="faq-a"><p>No. All prices are ex-GST. FreightGauge isn't currently GST registered, so there's nothing extra to add.</p></div>
       </div>
       <div class="faq-item fade-up">
-        <div class="faq-q">What is not included at any tier?</div>
-        <div class="faq-a"><p>Carrier contract negotiation on your behalf, platform integrations or API work, implementation of recommendations, and ongoing monitoring or retainer-based reporting. Need something outside this scope? <a href="contact.html" style="color:var(--fg-mid); font-weight:500;">Get in touch</a>.</p></div>
+        <div class="faq-q">What's not included?</div>
+        <div class="faq-a"><p>Carrier negotiation on your behalf, platform integrations, implementation of recommendations, and ongoing retainer work. All out of scope. Need something different? <a href="contact.html" style="color:var(--fg-mid); font-weight:500;">Get in touch</a>.</p></div>
       </div>
     </div>
   </section>
@@ -389,7 +389,7 @@
   <div class="footer-inner">
     <div>
       <div class="footer-brand">FreightGauge</div>
-      <div class="footer-tagline">Your last-mile health check &mdash; made simple.</div>
+      <div class="footer-tagline">Your last-mile health check. Made simple.</div>
     </div>
     <div class="footer-links">
       <a href="index.html">Home</a>
