@@ -253,25 +253,29 @@
     .problem-list { border-top: 1px solid var(--border); }
     .problem-row {
       display: grid;
-      grid-template-columns: 72px 1fr;
+      grid-template-columns: 80px 1fr;
       gap: 40px;
       align-items: start;
       padding: 40px 0;
       border-bottom: 1px solid var(--border);
+      border-radius: 4px;
+      transition: background 0.15s;
     }
+    .problem-row:hover { background: var(--fg-xlight); }
     .problem-num-large {
       font-family: 'Instrument Serif', serif;
-      font-size: 52px;
-      color: var(--fg-light);
+      font-size: 64px;
+      color: var(--fg-dark);
       line-height: 1;
       padding-top: 4px;
+      letter-spacing: -1px;
     }
-    .problem-num-large span { color: var(--fg-acc); }
+    .problem-num-large span { color: var(--fg-dark); }
     .problem-row h4 {
       font-family: 'DM Sans', sans-serif;
-      font-weight: 600;
-      font-size: 17px;
-      color: var(--ink);
+      font-weight: 700;
+      font-size: 19px;
+      color: var(--fg-dark);
       margin-bottom: 8px;
     }
     .problem-row p { font-size: 14.5px; line-height: 1.7; max-width: 640px; }
@@ -482,13 +486,6 @@
             <div>
               <h4>Written findings report</h4>
               <p>Plain-language findings from 2 pages (Lite) to 15 pages (Standard/Premium). The sort of thing you can forward to a business partner or carrier rep.</p>
-            </div>
-          </li>
-          <li>
-            <div class="deliverable-icon">🎙️</div>
-            <div>
-              <h4>Loom walkthrough</h4>
-              <p>A short recorded walkthrough of your dashboard and key findings, included on request.</p>
             </div>
           </li>
         </ul>
