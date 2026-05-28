@@ -19,13 +19,26 @@ if (burger && mobileNav) {
 }
 
 // ── FADE-UP ON SCROLL ──
-const fadeEls = document.querySelectorAll('.fade-up');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      observer.unobserve(e.target);
-    }
+document.addEventListener('DOMContentLoaded', () => {
+  const fadeEls = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0 });
+
+  fadeEls.forEach(el => observer.observe(el));
+
+  // Immediately reveal anything already in the viewport on load
+  requestAnimationFrame(() => {
+    fadeEls.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) {
+        el.classList.add('visible');
+      }
+    });
   });
-}, { threshold: 0 });
-fadeEls.forEach(el => observer.observe(el));
+});
