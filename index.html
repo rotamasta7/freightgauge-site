@@ -78,7 +78,8 @@
     .trust-bar-inner {
       display: flex;
       align-items: center;
-      gap: 48px;
+      justify-content: center;
+      gap: 40px;
       flex-wrap: wrap;
     }
     .trust-item {
@@ -325,6 +326,7 @@
     <div class="nav-links">
       <a href="index.html" class="nav-link active">Home</a>
       <a href="services.html" class="nav-link">Services</a>
+      <a href="demo.html" class="nav-link">Demo</a>
       <a href="about.html" class="nav-link">About</a>
       <a href="contact.html" class="nav-cta nav-link">Get started</a>
     </div>
@@ -336,6 +338,7 @@
 <div class="mobile-nav" id="mobileNav">
   <a href="index.html">Home</a>
   <a href="services.html">Services</a>
+  <a href="demo.html">Demo</a>
   <a href="about.html">About</a>
   <a href="contact.html" class="nav-cta">Get started</a>
 </div>
@@ -357,7 +360,13 @@
         <a href="contact.html" class="btn btn-primary">Get your health check →</a>
         <a href="services.html" class="btn btn-ghost">See what's included</a>
       </div>
-      <p class="hero-note fade-up fade-up-delay-3">No ongoing commitment · From $499 AUD · Three tiers to fit your freight spend · <a href="services.html#sample" style="color:var(--fg-mid); font-weight:500; text-decoration:underline;">See a sample report</a> &middot; <a href="demo.html" style="color:var(--fg-mid); font-weight:500; text-decoration:underline;">Explore interactive demo</a></p>
+      <div class="fade-up fade-up-delay-3" style="margin-top:16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+        <a href="demo.html" class="btn" style="background:var(--fg-light); color:var(--fg-dark); border:1.5px solid var(--fg-acc); font-size:14px; padding:10px 22px; border-radius:8px; font-weight:600; display:inline-flex; align-items:center; gap:7px; text-decoration:none;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Explore interactive demo
+        </a>
+        <span style="font-size:12px; color:var(--ink-faint);">No commitment &middot; From $499 &middot; <a href="services.html#sample" style="color:var(--ink-faint); text-decoration:underline;">sample pages</a></span>
+      </div>
     </div>
   </section>
 
@@ -367,23 +376,19 @@
       <div class="trust-bar-inner">
         <div class="trust-item">
           <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          Australian-owned & operated
+          Australian-owned &amp; operated
         </div>
         <div class="trust-item">
           <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          Built by logistics industry professional
+          Consignment-level analysis
         </div>
         <div class="trust-item">
           <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          Async delivery. No calls required
+          48&ndash;72 hr turnaround
         </div>
         <div class="trust-item">
           <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          48-72 hour turnaround
-        </div>
-        <div class="trust-item">
-          <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          Consistent, consignment-level analysis
+          No ongoing commitment
         </div>
       </div>
     </div>
