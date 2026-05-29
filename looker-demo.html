@@ -106,6 +106,7 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
 .ls-chip.ap.active { background: var(--ap-red); border-color: var(--ap-red); }
 .ls-chip.cp.active { background: var(--cp-yellow); border-color: var(--cp-yellow); }
 .ls-chip.ax.active { background: var(--ax-orange); border-color: var(--ax-orange); }
+.ls-filter-sep { display: inline-block; width: 1px; height: 20px; background: var(--border); margin: 0 10px; vertical-align: middle; }
 
 /* ── PAGES ── */
 .ls-page { display: none; padding: 20px; }
@@ -270,13 +271,19 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
   <button class="ls-tab" data-page="margin">Shipping Margin</button>
 </div>
 
-<!-- CARRIER FILTER -->
+<!-- FILTERS -->
 <div class="ls-filters">
   <span class="ls-filter-label">Carrier</span>
-  <button class="ls-chip active" data-carrier="all">All carriers</button>
-  <button class="ls-chip ap" data-carrier="auspost">AusPost</button>
-  <button class="ls-chip cp" data-carrier="cp">Couriers Please</button>
-  <button class="ls-chip ax" data-carrier="aramex">Aramex</button>
+  <button class="ls-chip carrier active" data-carrier="all">All carriers</button>
+  <button class="ls-chip carrier ap" data-carrier="auspost">AusPost</button>
+  <button class="ls-chip carrier cp" data-carrier="cp">Couriers Please</button>
+  <button class="ls-chip carrier ax" data-carrier="aramex">Aramex</button>
+  <span class="ls-filter-sep"></span>
+  <span class="ls-filter-label">Period</span>
+  <button class="ls-chip month active" data-month="all">All</button>
+  <button class="ls-chip month" data-month="jan">Jan</button>
+  <button class="ls-chip month" data-month="feb">Feb</button>
+  <button class="ls-chip month" data-month="mar">Mar</button>
 </div>
 
 <!-- ═══ PAGE: OVERVIEW ═══ -->
@@ -624,10 +631,31 @@ const DATA = {
   },
   monthly: {
     labels: ['January', 'February', 'March'],
-    all:     [8872, 7858, 8620],
-    auspost: [5675, 5026, 5514],
-    cp:      [2638, 2332, 2567],
-    aramex:  [559,  500,  539],
+    spend: {
+      all:     [8872, 7858, 8620],
+      auspost: [5675, 5026, 5514],
+      cp:      [2638, 2332, 2567],
+      aramex:  [559,  500,  539],
+    },
+    cons: {
+      all:     [441, 391, 428],
+      auspost: [266, 236, 258],
+      cp:      [147, 130, 143],
+      aramex:  [28,  25,  27],
+    },
+  },
+  // Lookup: spend[carrier][month]
+  spotSpend: {
+    auspost: { all: 16215, jan: 5675, feb: 5026, mar: 5514 },
+    cp:      { all: 7537,  jan: 2638, feb: 2332, mar: 2567 },
+    aramex:  { all: 1598,  jan: 559,  feb: 500,  mar: 539  },
+    all:     { all: 25350, jan: 8872, feb: 7858, mar: 8620  },
+  },
+  spotCons: {
+    auspost: { all: 760, jan: 266, feb: 236, mar: 258 },
+    cp:      { all: 420, jan: 147, feb: 130, mar: 143 },
+    aramex:  { all: 80,  jan: 28,  feb: 25,  mar: 27  },
+    all:     { all: 1260, jan: 441, feb: 391, mar: 428 },
   },
   states: {
     labels: ['NSW', 'VIC', 'QLD', 'WA', 'SA', 'Other'],
@@ -647,7 +675,7 @@ const DATA = {
     { code: '6000', suburb: 'Perth CBD',     state: 'WA',  cons: 19, spend: 380,  avg: 20.00 },
   ],
   weightBands: {
-    labels: ['0-0.5 kg', '0.5-1 kg', '1-2 kg', '2-5 kg', '5 kg+'],
+    labels: ['0–0.5 kg', '0.5–1 kg', '1–2 kg', '2–5 kg', '5 kg+'],
     all:     [280, 378, 378, 189, 35],
     auspost: [168, 228, 228, 114, 22],
     cp:      [93,  126, 126, 63,  12],
@@ -658,30 +686,46 @@ const DATA = {
     auspost: [12460, 2180, 930, 645],
     cp:      [6090,  840,  0,   607],
     aramex:  [1260,  220,  0,   118],
+    all:     [19810, 3240, 930, 1370],
   },
   freeShipping: {
-    bands:       ['$0-49', '$50-74', '$75-94', '$95-124', '$125-149', '$150+'],
-    orders:      [85,  156, 490,  312,  134,  83],
-    freePct:     [0,   0,   100,  0,    0,    0],
+    bands:   ['$0–49', '$50–74', '$75–94', '$95–124', '$125–149', '$150+'],
+    orders:  [85, 156, 490, 312, 134, 83],
+    free:    [0,   0,  490,   0,   0,  0],
+    paid:    [85, 156,   0, 312, 134, 83],
   },
   zone: {
-    labels: ['Metro (≤15km)', 'Suburban (15-50km)', 'Regional (50km+)'],
+    labels: ['Metro (≤15km)', 'Suburban (15–50km)', 'Regional (50km+)'],
     cons:   [428, 567, 265],
     colors: ['#43a047', '#66bb6a', '#a5d6a7'],
   },
 };
 
+// ══════════════════════════════════════════
+// FILTER STATE
+// ══════════════════════════════════════════
 let activeCarrier = 'all';
+let activeMonth = 'all';
 
 // ══════════════════════════════════════════
 // HELPERS
 // ══════════════════════════════════════════
-const fmt = (n) => '$' + n.toLocaleString('en-AU', {minimumFractionDigits: 0, maximumFractionDigits: 0});
-const fmtDec = (n) => '$' + n.toFixed(2);
+const fmt = (n) => '$' + Math.round(n).toLocaleString('en-AU');
+const fmtDec = (n) => '$' + (+n).toFixed(2);
 
 function getCarrierColor(carrier) {
-  const colors = { all: '#43a047', auspost: '#c8102e', cp: '#d97706', aramex: '#c2410c' };
-  return colors[carrier] || '#43a047';
+  return { all: '#43a047', auspost: '#c8102e', cp: '#d97706', aramex: '#c2410c' }[carrier] || '#43a047';
+}
+
+function getScale() {
+  // Proportional scale for geo/zone charts: filtered_cons / total_cons
+  const filteredCons = DATA.spotCons[activeCarrier][activeMonth];
+  return filteredCons / 1260;
+}
+
+function getMonthScale() {
+  const monthCons = { all: 1260, jan: 441, feb: 391, mar: 428 };
+  return monthCons[activeMonth] / 1260;
 }
 
 // ══════════════════════════════════════════
@@ -706,7 +750,7 @@ function initCharts() {
       labels: DATA.monthly.labels,
       datasets: [{
         label: 'Freight spend',
-        data: DATA.monthly.all,
+        data: DATA.monthly.spend.all,
         borderColor: '#43a047',
         backgroundColor: 'rgba(67,160,71,.1)',
         borderWidth: 2.5,
@@ -756,7 +800,7 @@ function initCharts() {
       datasets: [{
         label: 'Avg cost / con.',
         data: [21.34, 17.94, 19.98, 16.40],
-        backgroundColor: ['#c8102e', '#d97706', '#c2410c', '#43a047'],
+        backgroundColor: ['rgba(200,16,46,.85)', 'rgba(217,119,6,.85)', 'rgba(194,65,12,.85)', 'rgba(67,160,71,.85)'],
         borderRadius: 5,
         barThickness: 36,
       }]
@@ -779,7 +823,7 @@ function initCharts() {
       datasets: [{
         label: 'Consignments',
         data: [760, 420, 80],
-        backgroundColor: ['rgba(200,16,46,.8)', 'rgba(217,119,6,.8)', 'rgba(194,65,12,.8)'],
+        backgroundColor: ['rgba(200,16,46,.85)', 'rgba(217,119,6,.85)', 'rgba(194,65,12,.85)'],
         borderRadius: 5,
         barThickness: 42,
       }]
@@ -800,10 +844,10 @@ function initCharts() {
     data: {
       labels: ['AusPost', 'Couriers Please', 'Aramex'],
       datasets: [
-        { label: 'Base freight', data: [12460, 6090, 1260], backgroundColor: 'rgba(67,160,71,.8)', borderRadius: 0 },
-        { label: 'DIM surcharge', data: [2180, 840, 220],   backgroundColor: 'rgba(239,83,80,.8)', borderRadius: 0 },
-        { label: 'Residential',   data: [930, 0, 0],         backgroundColor: 'rgba(255,167,38,.8)', borderRadius: 0 },
-        { label: 'Fuel levy',     data: [645, 607, 118],     backgroundColor: 'rgba(120,144,156,.8)', borderRadius: { topLeft: 4, topRight: 4 } },
+        { label: 'Base freight', data: [12460, 6090, 1260], backgroundColor: 'rgba(67,160,71,.8)',   borderRadius: 0 },
+        { label: 'DIM surcharge', data: [2180,  840,  220],  backgroundColor: 'rgba(239,83,80,.8)',   borderRadius: 0 },
+        { label: 'Residential',   data: [930,    0,    0],   backgroundColor: 'rgba(255,167,38,.8)',  borderRadius: 0 },
+        { label: 'Fuel levy',     data: [645,   607,  118],  backgroundColor: 'rgba(120,144,156,.8)', borderRadius: { topLeft: 4, topRight: 4 } },
       ]
     },
     options: {
@@ -877,7 +921,7 @@ function initCharts() {
     options: {
       responsive: true, maintainAspectRatio: false,
       cutout: '58%',
-      plugins: { legend: { position: 'right' }, tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': ' + ctx.raw + ' cons (' + ((ctx.raw/1260)*100).toFixed(0) + '%)' } } }
+      plugins: { legend: { position: 'right' }, tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': ' + Math.round(ctx.raw) + ' cons (' + ((ctx.raw / DATA.zone.cons.reduce((a,b)=>a+b,0)) * 100).toFixed(0) + '%)' } } }
     }
   });
 
@@ -911,7 +955,7 @@ function initCharts() {
       datasets: [{
         label: '% billed on DIM weight',
         data: [72, 58, 80, 48],
-        backgroundColor: ['rgba(200,16,46,.8)', 'rgba(217,119,6,.8)', 'rgba(194,65,12,.8)', 'rgba(67,160,71,.8)'],
+        backgroundColor: ['rgba(200,16,46,.85)', 'rgba(217,119,6,.85)', 'rgba(194,65,12,.85)', 'rgba(67,160,71,.85)'],
         borderRadius: 5,
         barThickness: 36,
       }]
@@ -932,8 +976,8 @@ function initCharts() {
     data: {
       labels: DATA.freeShipping.bands,
       datasets: [
-        { label: 'Free shipping', data: [0, 0, 490, 0, 0, 0], backgroundColor: 'rgba(211,47,47,.7)', borderRadius: 0 },
-        { label: 'Paid shipping', data: [85, 156, 0, 312, 134, 83], backgroundColor: 'rgba(67,160,71,.7)', borderRadius: { topLeft:4, topRight:4 } },
+        { label: 'Free shipping', data: DATA.freeShipping.free, backgroundColor: 'rgba(211,47,47,.7)', borderRadius: 0 },
+        { label: 'Paid shipping', data: DATA.freeShipping.paid, backgroundColor: 'rgba(67,160,71,.7)', borderRadius: { topLeft:4, topRight:4 } },
       ]
     },
     options: {
@@ -959,7 +1003,7 @@ function initCharts() {
         backgroundColor: 'rgba(198,40,40,.08)',
         borderWidth: 2,
         pointRadius: thresholdPoints.map(v => v === 75 ? 6 : 2),
-        pointBackgroundColor: thresholdPoints.map(v => v === 75 ? '#c62828' : '#c62828'),
+        pointBackgroundColor: '#c62828',
         fill: true, tension: .4,
       }]
     },
@@ -997,7 +1041,7 @@ function initCharts() {
 
   // Populate postcode table
   const tbody = document.getElementById('postcode-table-body');
-  DATA.postcodes.forEach((p, i) => {
+  DATA.postcodes.forEach((p) => {
     tbody.innerHTML += `<tr>
       <td style="font-weight:700">${p.code}</td>
       <td>${p.suburb}</td>
@@ -1012,16 +1056,14 @@ function initCharts() {
 // ══════════════════════════════════════════
 // THRESHOLD MODELLER
 // ══════════════════════════════════════════
-// AOV distribution model: normal-ish around $94
-// Orders by AOV bucket (total 1260):
 const aovBuckets = [
   { threshold: 50,  qualify: 0.92, subsidy: 11500 },
   { threshold: 60,  qualify: 0.84, subsidy: 10490 },
   { threshold: 70,  qualify: 0.72, subsidy: 8990  },
-  { threshold: 75,  qualify: 0.58, subsidy: 8220  }, // current
+  { threshold: 75,  qualify: 0.58, subsidy: 8220  },
   { threshold: 80,  qualify: 0.51, subsidy: 7270  },
   { threshold: 90,  qualify: 0.44, subsidy: 6280  },
-  { threshold: 95,  qualify: 0.42, subsidy: 6120  }, // recommended
+  { threshold: 95,  qualify: 0.42, subsidy: 6120  },
   { threshold: 100, qualify: 0.38, subsidy: 5420  },
   { threshold: 110, qualify: 0.30, subsidy: 4280  },
   { threshold: 120, qualify: 0.24, subsidy: 3420  },
@@ -1033,7 +1075,6 @@ const aovBuckets = [
 function calcSubsidy(threshold) {
   const exact = aovBuckets.find(b => b.threshold === threshold);
   if (exact) return exact.subsidy;
-  // Interpolate
   const lower = aovBuckets.filter(b => b.threshold < threshold).pop();
   const upper = aovBuckets.find(b => b.threshold > threshold);
   if (!lower) return aovBuckets[0].subsidy;
@@ -1062,65 +1103,186 @@ document.getElementById('threshold-slider').addEventListener('input', function()
   document.getElementById('impact-qualify').textContent = (qualify * 100).toFixed(0) + '%';
   document.getElementById('impact-cost').textContent = fmt(subsidy);
   document.getElementById('impact-saving').textContent = saving > 0 ? fmt(saving) : '$0';
-  // Update threshold model highlight
   const thresholds = [50,60,70,75,80,90,95,100,110,120,130,140,150];
   charts.thresholdModel.data.datasets[0].pointRadius = thresholds.map(t => t === v ? 7 : 2);
   charts.thresholdModel.update('none');
 });
 
 // ══════════════════════════════════════════
-// CARRIER FILTER
+// RENDER ALL — applies both filters
 // ══════════════════════════════════════════
-document.querySelectorAll('.ls-chip').forEach(chip => {
-  chip.addEventListener('click', function() {
-    document.querySelectorAll('.ls-chip').forEach(c => c.classList.remove('active'));
-    this.classList.add('active');
-    activeCarrier = this.dataset.carrier;
-    updateChartsForCarrier(activeCarrier);
-    updateKPIsForCarrier(activeCarrier);
-  });
-});
-
-function updateKPIsForCarrier(carrier) {
-  const d = DATA.carriers[carrier];
-  document.getElementById('kpi-spend').textContent = fmt(d.spend);
-  document.getElementById('kpi-cons').textContent = d.cons.toLocaleString();
-  document.getElementById('kpi-avg').textContent = fmtDec(d.avg);
-}
-
-function updateChartsForCarrier(carrier) {
-  // Monthly trend
-  const monthlyData = carrier === 'all' ? DATA.monthly.all
-    : carrier === 'auspost' ? DATA.monthly.auspost
-    : carrier === 'cp' ? DATA.monthly.cp
-    : DATA.monthly.aramex;
+function renderAll() {
+  const carrier = activeCarrier;
+  const month = activeMonth;
+  const scale = getScale();
+  const monthScale = getMonthScale();
   const color = getCarrierColor(carrier);
-  charts.monthlyTrend.data.datasets[0].data = monthlyData;
-  charts.monthlyTrend.data.datasets[0].borderColor = color;
-  charts.monthlyTrend.data.datasets[0].backgroundColor = color.replace(')', ',.1)').replace('rgb', 'rgba');
-  charts.monthlyTrend.data.datasets[0].pointBackgroundColor = color;
+
+  const spend = DATA.spotSpend[carrier][month];
+  const cons  = DATA.spotCons[carrier][month];
+  const avg   = spend / cons;
+
+  // ── DATE CHIP ──
+  const dateLabels = { all: '1 Jan – 31 Mar 2025', jan: 'January 2025', feb: 'February 2025', mar: 'March 2025' };
+  const dateEl = document.querySelector('.ls-date-chip');
+  if (dateEl) dateEl.textContent = dateLabels[month];
+
+  // ════════════════════
+  // OVERVIEW
+  // ════════════════════
+  // KPIs
+  document.getElementById('kpi-spend').textContent = fmt(spend);
+  document.getElementById('kpi-cons').textContent = cons.toLocaleString();
+  document.getElementById('kpi-avg').textContent = fmtDec(avg);
+
+  // Monthly trend
+  const trendData = DATA.monthly.spend[carrier === 'all' ? 'all' : carrier];
+  const trendColor = color;
+  charts.monthlyTrend.data.datasets[0].data = trendData;
+  charts.monthlyTrend.data.datasets[0].borderColor = trendColor;
+  charts.monthlyTrend.data.datasets[0].backgroundColor = trendColor.replace(')', ',.1)').replace('rgb', 'rgba');
+  charts.monthlyTrend.data.datasets[0].pointBackgroundColor = trendColor;
+  // Highlight selected month
+  if (month !== 'all') {
+    const mi = { jan: 0, feb: 1, mar: 2 }[month];
+    charts.monthlyTrend.data.datasets[0].pointRadius = [0,1,2].map(i => i === mi ? 7 : 4);
+    charts.monthlyTrend.data.datasets[0].pointStyle = [0,1,2].map(i => i === mi ? 'circle' : 'circle');
+  } else {
+    charts.monthlyTrend.data.datasets[0].pointRadius = 5;
+  }
   charts.monthlyTrend.update();
 
-  // Weight band
-  const wbData = carrier === 'all' ? DATA.weightBands.all
-    : carrier === 'auspost' ? DATA.weightBands.auspost
-    : carrier === 'cp' ? DATA.weightBands.cp
-    : DATA.weightBands.aramex;
-  charts.weightBand.data.datasets[0].data = wbData;
+  // Carrier donut — highlight selected
+  const baseColors = ['#c8102e','#d97706','#c2410c'];
+  const dimColors  = ['rgba(200,16,46,.2)','rgba(217,119,6,.2)','rgba(194,65,12,.2)'];
+  if (carrier !== 'all') {
+    const ci = { auspost: 0, cp: 1, aramex: 2 }[carrier];
+    charts.carrierDonut.data.datasets[0].backgroundColor = baseColors.map((c, i) => i === ci ? c : dimColors[i]);
+  } else {
+    charts.carrierDonut.data.datasets[0].backgroundColor = baseColors;
+  }
+  // Scale donut values by month
+  const scaledDonut = [
+    DATA.spotSpend.auspost[month],
+    DATA.spotSpend.cp[month],
+    DATA.spotSpend.aramex[month],
+  ];
+  charts.carrierDonut.data.datasets[0].data = scaledDonut;
+  charts.carrierDonut.update();
+
+  // ════════════════════
+  // CARRIERS PAGE
+  // ════════════════════
+  // Avg cost bar — dim unselected carriers
+  const carrierIdxMap = { auspost: 0, cp: 1, aramex: 2 };
+  const avgColors = ['rgba(200,16,46,.85)', 'rgba(217,119,6,.85)', 'rgba(194,65,12,.85)', 'rgba(67,160,71,.85)'];
+  const avgDimmed = ['rgba(200,16,46,.15)', 'rgba(217,119,6,.15)', 'rgba(194,65,12,.15)', 'rgba(67,160,71,.85)'];
+  if (carrier !== 'all') {
+    const ci = carrierIdxMap[carrier];
+    charts.carrierAvg.data.datasets[0].backgroundColor = avgColors.map((c, i) => (i === ci || i === 3) ? avgColors[i] : avgDimmed[i]);
+  } else {
+    charts.carrierAvg.data.datasets[0].backgroundColor = avgColors;
+  }
+  charts.carrierAvg.update();
+
+  // Volume bar — scale by month + highlight selected carrier
+  const baseVol = [DATA.spotCons.auspost[month], DATA.spotCons.cp[month], DATA.spotCons.aramex[month]];
+  const volColors = ['rgba(200,16,46,.85)', 'rgba(217,119,6,.85)', 'rgba(194,65,12,.85)'];
+  const volDimmed  = ['rgba(200,16,46,.15)', 'rgba(217,119,6,.15)', 'rgba(194,65,12,.15)'];
+  charts.carrierVol.data.datasets[0].data = baseVol;
+  if (carrier !== 'all') {
+    const ci = carrierIdxMap[carrier];
+    charts.carrierVol.data.datasets[0].backgroundColor = volColors.map((c, i) => i === ci ? volColors[i] : volDimmed[i]);
+  } else {
+    charts.carrierVol.data.datasets[0].backgroundColor = volColors;
+  }
+  charts.carrierVol.update();
+
+  // Charge type — scale by month; show selected carrier only if filtered
+  const chargeLabels = ['AusPost', 'Couriers Please', 'Aramex'];
+  const chargeDs = DATA.chargeTypes;
+  if (carrier !== 'all') {
+    // Show only selected carrier
+    const cLabel = { auspost: 'AusPost', cp: 'Couriers Please', aramex: 'Aramex' }[carrier];
+    charts.chargeType.data.labels = [cLabel];
+    charts.chargeType.data.datasets[0].data = [Math.round(chargeDs[carrier][0] * monthScale)];
+    charts.chargeType.data.datasets[1].data = [Math.round(chargeDs[carrier][1] * monthScale)];
+    charts.chargeType.data.datasets[2].data = [Math.round(chargeDs[carrier][2] * monthScale)];
+    charts.chargeType.data.datasets[3].data = [Math.round(chargeDs[carrier][3] * monthScale)];
+  } else {
+    charts.chargeType.data.labels = chargeLabels;
+    charts.chargeType.data.datasets[0].data = [Math.round(chargeDs.auspost[0]*monthScale), Math.round(chargeDs.cp[0]*monthScale), Math.round(chargeDs.aramex[0]*monthScale)];
+    charts.chargeType.data.datasets[1].data = [Math.round(chargeDs.auspost[1]*monthScale), Math.round(chargeDs.cp[1]*monthScale), Math.round(chargeDs.aramex[1]*monthScale)];
+    charts.chargeType.data.datasets[2].data = [Math.round(chargeDs.auspost[2]*monthScale), Math.round(chargeDs.cp[2]*monthScale), Math.round(chargeDs.aramex[2]*monthScale)];
+    charts.chargeType.data.datasets[3].data = [Math.round(chargeDs.auspost[3]*monthScale), Math.round(chargeDs.cp[3]*monthScale), Math.round(chargeDs.aramex[3]*monthScale)];
+  }
+  charts.chargeType.update();
+
+  // ════════════════════
+  // GEOGRAPHY PAGE
+  // ════════════════════
+  // Scale state data by combined carrier+month proportion
+  charts.stateSpend.data.datasets[0].data = DATA.states.spend.map(v => Math.round(v * scale));
+  charts.stateCons.data.datasets[0].data  = DATA.states.cons.map(v => Math.round(v * scale));
+  charts.stateSpend.update();
+  charts.stateCons.update();
+
+  // Zone donut — scale by filter
+  const scaledZone = DATA.zone.cons.map(v => Math.round(v * scale));
+  charts.zone.data.datasets[0].data = scaledZone;
+  charts.zone.update();
+
+  // ════════════════════
+  // WEIGHT & DIM PAGE
+  // ════════════════════
+  // Weight band — filter by carrier, scale by month
+  const wbBase = DATA.weightBands[carrier === 'all' ? 'all' : carrier];
+  charts.weightBand.data.datasets[0].data = wbBase.map(v => Math.round(v * monthScale));
   charts.weightBand.data.datasets[0].backgroundColor = color;
   charts.weightBand.update();
 
-  // Carrier donut — highlight selected
+  // DIM rate — highlight selected carrier
+  const dimColors2 = ['rgba(200,16,46,.85)', 'rgba(217,119,6,.85)', 'rgba(194,65,12,.85)', 'rgba(67,160,71,.85)'];
+  const dimDimmed  = ['rgba(200,16,46,.15)', 'rgba(217,119,6,.15)', 'rgba(194,65,12,.15)', 'rgba(67,160,71,.85)'];
   if (carrier !== 'all') {
-    const alphas = { auspost: ['rgba(200,16,46,1)','rgba(217,119,6,.2)','rgba(194,65,12,.2)'],
-                     cp:      ['rgba(200,16,46,.2)','rgba(217,119,6,1)','rgba(194,65,12,.2)'],
-                     aramex:  ['rgba(200,16,46,.2)','rgba(217,119,6,.2)','rgba(194,65,12,1)'] };
-    charts.carrierDonut.data.datasets[0].backgroundColor = alphas[carrier];
+    const ci = carrierIdxMap[carrier];
+    charts.dimRate.data.datasets[0].backgroundColor = dimColors2.map((c, i) => (i === ci || i === 3) ? dimColors2[i] : dimDimmed[i]);
   } else {
-    charts.carrierDonut.data.datasets[0].backgroundColor = ['#c8102e','#d97706','#c2410c'];
+    charts.dimRate.data.datasets[0].backgroundColor = dimColors2;
   }
-  charts.carrierDonut.update();
+  charts.dimRate.update();
+
+  // ════════════════════
+  // MARGIN PAGE
+  // ════════════════════
+  // Waterfall — scale freight cost by carrier+month; revenue scales proportionally
+  const totalCost     = Math.round(25350 * scale);
+  const totalRevenue  = Math.round(5264  * scale);
+  const netLoss       = totalRevenue - totalCost;
+  charts.marginWaterfall.data.datasets[0].data = [totalRevenue, totalCost, netLoss];
+  charts.marginWaterfall.update();
 }
+
+// ══════════════════════════════════════════
+// FILTER CHIP EVENTS
+// ══════════════════════════════════════════
+document.querySelectorAll('.ls-chip.carrier').forEach(chip => {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('.ls-chip.carrier').forEach(c => c.classList.remove('active'));
+    this.classList.add('active');
+    activeCarrier = this.dataset.carrier;
+    renderAll();
+  });
+});
+
+document.querySelectorAll('.ls-chip.month').forEach(chip => {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('.ls-chip.month').forEach(c => c.classList.remove('active'));
+    this.classList.add('active');
+    activeMonth = this.dataset.month;
+    renderAll();
+  });
+});
 
 // ══════════════════════════════════════════
 // PAGE TABS
@@ -1128,17 +1290,13 @@ function updateChartsForCarrier(carrier) {
 document.querySelectorAll('.ls-tab').forEach(tab => {
   tab.addEventListener('click', function() {
     document.querySelectorAll('.ls-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.ls-page').forEach(p => p.classList.remove('active'));
     this.classList.add('active');
-    document.getElementById('page-' + this.dataset.page).classList.add('active');
-    // Resize charts on tab switch
-    Object.values(charts).forEach(c => { try { c.resize(); } catch(e){} });
+    const pageId = 'page-' + this.dataset.page;
+    document.querySelectorAll('.ls-page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
   });
 });
 
-// ══════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', initCharts);
 </script>
 </body>
