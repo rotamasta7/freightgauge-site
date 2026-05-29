@@ -158,6 +158,17 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
 .ls-table tr:last-child td { border-bottom: none; }
 .ls-table tr.total-row td { font-weight: 700; background: #f8f9fa; border-top: 1.5px solid var(--border); border-bottom: none; }
 .ls-table tr:hover td { background: #f8fdf8; }
+/* ── COLUMN HEADER TOOLTIPS ── */
+.th-tip { position: relative; cursor: help; border-bottom: 1px dashed var(--ink-faint); }
+.th-tip::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  background: #333; color: #fff; font-size: 11px; font-weight: 400; text-transform: none;
+  letter-spacing: 0; white-space: nowrap; padding: 5px 8px; border-radius: 4px;
+  opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 100;
+}
+.th-tip:hover::after { opacity: 1; }
+
 
 /* ── CARRIER BADGE ── */
 .cbadge { display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; }
@@ -237,6 +248,27 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
   .impact-panel { grid-template-columns: repeat(3, 1fr); }
   .ls-header-right .ls-updated { display: none; }
 }
+
+/* ── CARRIER HEALTH TAB ── */
+.health-scorecard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
+.health-carrier-card { background: var(--card-bg); border-radius: 8px; padding: 14px 16px; border: 1px solid var(--border); }
+.health-carrier-card.ap { border-top: 3px solid var(--ap-red); }
+.health-carrier-card.cp { border-top: 3px solid var(--cp-yellow); }
+.health-carrier-card.ax { border-top: 3px solid var(--ax-orange); }
+.health-carrier-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+.health-metric-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid #f0f0f0; font-size: 12.5px; }
+.health-metric-row:last-child { border-bottom: none; }
+.health-metric-label { color: var(--ink-muted); }
+.health-metric-val { font-weight: 700; }
+.health-metric-val.ok { color: #2e7d32; }
+.health-metric-val.warn { color: #e65100; }
+.health-metric-val.bad { color: #c62828; }
+.health-gauge-wrap { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+.health-gauge-bg { flex: 1; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+.health-gauge-fill { height: 100%; border-radius: 4px; transition: width .4s; }
+.health-benchmark-line { font-size: 11px; color: var(--ink-faint); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); }
+.health-data-note { background: #f1f8e9; border: 1px solid #aed581; border-radius: 6px; padding: 9px 13px; font-size: 12px; color: #33691e; margin-bottom: 14px; }
+
 </style>
 </head>
 <body>
@@ -269,6 +301,7 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
   <button class="ls-tab" data-page="geography">Geography</button>
   <button class="ls-tab" data-page="weight">Weight &amp; DIM</button>
   <button class="ls-tab" data-page="margin">Shipping Margin</button>
+  <button class="ls-tab" data-page="health">Carrier Health</button>
 </div>
 
 <!-- FILTERS -->
@@ -304,7 +337,7 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
     <div class="card">
       <div class="card-title">Avg Cost / Consignment</div>
       <div class="kpi-value red" id="kpi-avg">$20.12</div>
-      <div class="kpi-sub">FG benchmark: $16.40</div>
+      <div class="kpi-sub">AU benchmark: $16.40 (460k+ orders)</div>
       <div class="kpi-delta down">+$3.72 above benchmark</div>
     </div>
     <div class="card">
@@ -340,8 +373,8 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
           <th>Share</th>
           <th>Total Spend</th>
           <th>Avg / Con.</th>
-          <th>vs Benchmark</th>
-          <th>DIM Rate</th>
+          <th><span class="th-tip" data-tip="Avg cost vs AU carrier benchmark (460k+ orders, Q1 2026)">vs Benchmark</span></th>
+          <th><span class="th-tip" data-tip="% of consignments billed on dimensional weight, not actual weight">DIM Rate</span></th>
         </tr>
       </thead>
       <tbody>
@@ -484,13 +517,13 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
       <div class="card-title">Overall DIM Rate</div>
       <div class="kpi-value red">71%</div>
       <div class="kpi-sub">895 of 1,260 cons billed on DIM weight</div>
-      <div class="kpi-delta down">FG benchmark: 48%</div>
+      <div class="kpi-delta down">AU benchmark: 48% (460k+ orders)</div>
     </div>
     <div class="card">
-      <div class="card-title">Excess DIM vs Benchmark</div>
+      <div class="card-title">DIM vs Benchmark Gap</div>
       <div class="kpi-value red">+23 pts</div>
-      <div class="kpi-sub">Primary driver: oversized packaging</div>
-      <div class="kpi-delta down">Est. $1,200/quarter overcharge</div>
+      <div class="kpi-sub">Above AU benchmark for this weight profile</div>
+      <div class="kpi-delta down">Gap review included in report</div>
     </div>
     <div class="card">
       <div class="card-title">Avg DIM Weight</div>
@@ -546,6 +579,9 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
 
 <!-- ═══ PAGE: SHIPPING MARGIN ═══ -->
 <div class="ls-page" id="page-margin">
+  <div style="background:#fff8e1; border:1px solid #ffe082; border-radius:6px; padding:10px 14px; margin-bottom:14px; font-size:12.5px; color:#5d4037;">
+    <strong>Note:</strong> Shipping margin analysis requires your orders export (revenue per order). The figures below are modelled from the supplied carrier invoice data — confirm against your actual revenue for precise margin rates.
+  </div>
   <div class="ls-row ls-row-4">
     <div class="card">
       <div class="card-title">Free Shipping Rate</div>
@@ -614,6 +650,152 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
     <div class="card-title">Freight Margin — Charged to Customer vs Cost</div>
     <div class="chart-wrap" style="height:160px">
       <canvas id="chart-margin-waterfall"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: CARRIER HEALTH ═══ -->
+<div class="ls-page" id="page-health">
+  <div class="health-data-note">
+    <strong>Demo data:</strong> Delivery performance figures below are illustrative estimates. In a live engagement, these are sourced directly from your carrier tracking data or Snowflake fields: <code>IS_COMPLETED_DELIVERY_ON_TIME</code>, <code>IS_FIRST_TIME_DELIVERY</code>, <code>HOURS_AWAITING_PICKUP_MEET_TARGET</code>, <code>DAYS_IN_TRANSIT_EXCL_WEEKENDS_HOLIDAYS</code>.
+  </div>
+
+  <div class="health-scorecard">
+    <!-- AusPost -->
+    <div class="health-carrier-card ap">
+      <div class="health-carrier-name" style="color:var(--ap-red);">AusPost</div>
+      <div class="health-metric-row">
+        <span class="health-metric-label">DIFOT (on time)</span>
+        <span class="health-metric-val ok">94%</span>
+      </div>
+      <div class="health-gauge-wrap">
+        <div class="health-gauge-bg"><div class="health-gauge-fill" style="width:94%;background:#2e7d32;"></div></div>
+      </div>
+      <div class="health-metric-row">
+        <span class="health-metric-label">First attempt delivery</span>
+        <span class="health-metric-val ok">91%</span>
+      </div>
+      <div class="health-gauge-wrap">
+        <div class="health-gauge-bg"><div class="health-gauge-fill" style="width:91%;background:#43a047;"></div></div>
+      </div>
+      <div class="health-metric-row">
+        <span class="health-metric-label">CIFOT (pickup on time)</span>
+        <span class="health-metric-val ok">97%</span>
+      </div>
+      <div class="health-gauge-wrap">
+        <div class="health-gauge-bg"><div class="health-gauge-fill" style="width:97%;background:#2e7d32;"></div></div>
+      </div>
+      <div class="health-metric-row">
+        <span class="health-metric-label">Avg transit (bus. days)</span>
+        <span class="health-metric-val ok">3.1</span>
+      </div>
+      <div class="health-benchmark-line">Tier 1 benchmark: 95%+ DIFOT &middot; Below 90% = flag</div>
+    </div>
+
+    <!-- Couriers Please -->
+    <div class="health-carrier-card cp">
+      <div class="health-carrier-name" style="color:var(--cp-yellow);">Couriers Please</div>
+      <div class="health-metric-row">
+        <span class="health-metric-label">DIFOT (on time)</span>
+        <span class="health-metric-val bad">88% &#9888;</span>
+      </div>
+      <div class="health-gauge-wrap">
+        <div class="health-gauge-bg"><div class="health-gauge-fill" style="width:88%;background:#c62828;"></div></div>
+      </div>
+      <div class="health-metric-row">
+        <span class="health-metric-label">First attempt delivery</span>
+        <span class="health-metric-val warn">85%</span>
+      </div>
+      <div class="health-gauge-wrap">
+        <div class="health-gauge-bg"><div class="health-gauge-fill" style="width:85%;background:#e65100;"></div></div>
+      </div>
+      <div class="health-metric-row">
+        <span class="health-metric-label">CIFOT (pickup on time)</span>
+        <span class="health-metric-val bad">82% &#9888;</span>
+      </div>
+      <div class="health-gauge-wrap">
+        <div class="health-gauge-bg"><div class="health-gauge-fill" style="width:82%;background:#c62828;"></div></div>
+      </div>
+      <div class="health-metric-row">
+        <span class="health-metric-label">Avg transit (bus. days)</span>
+        <span class="health-metric-val warn">3.8</span>
+      </div>
+      <div class="health-benchmark-line">Below 90% DIFOT threshold &mdash; recommend performance review with CP account manager</div>
+    </div>
+
+    <!-- Aramex -->
+    <div class="health-carrier-card ax">
+      <div class="health-carrier-name" style="color:var(--ax-orange);">Aramex</div>
+      <div class="health-metric-row">
+        <span class="health-metric-label">DIFOT (on time)</span>
+        <span class="health-metric-val ok">91%</span>
+      </div>
+      <div class="health-gauge-wrap">
+        <div class="health-gauge-bg"><div class="health-gauge-fill" style="width:91%;background:#43a047;"></div></div>
+      </div>
+      <div class="health-metric-row">
+        <span class="health-metric-label">First attempt delivery</span>
+        <span class="health-metric-val ok">88%</span>
+      </div>
+      <div class="health-gauge-wrap">
+        <div class="health-gauge-bg"><div class="health-gauge-fill" style="width:88%;background:#66bb6a;"></div></div>
+      </div>
+      <div class="health-metric-row">
+        <span class="health-metric-label">CIFOT (pickup on time)</span>
+        <span class="health-metric-val warn">89%</span>
+      </div>
+      <div class="health-gauge-wrap">
+        <div class="health-gauge-bg"><div class="health-gauge-fill" style="width:89%;background:#e65100;"></div></div>
+      </div>
+      <div class="health-metric-row">
+        <span class="health-metric-label">Avg transit (bus. days)</span>
+        <span class="health-metric-val ok">3.4</span>
+      </div>
+      <div class="health-benchmark-line">Tier 1 benchmark: 95%+ DIFOT &middot; Tracking within acceptable range</div>
+    </div>
+  </div>
+
+  <div class="ls-row ls-row-2">
+    <div class="card">
+      <div class="card-title">DIFOT by Carrier — On-Time Delivery Rate</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="chart-difot"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">First Attempt Delivery Rate by Carrier</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="chart-first-attempt"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="ls-row ls-row-2">
+    <div class="card">
+      <div class="card-title">CIFOT — Pickup On-Time Rate by Carrier</div>
+      <div class="chart-wrap" style="height:200px">
+        <canvas id="chart-cifot"></canvas>
+      </div>
+    </div>
+    <div class="card" style="align-self:start;">
+      <div class="card-title">Key Findings</div>
+      <div style="padding: 4px 0;">
+        <div class="alt-row" style="padding:8px 0; border-bottom:1px solid #f0f0f0;">
+          <span class="kpi-delta bad" style="margin:0 8px 0 0; white-space:nowrap;">CP flag</span>
+          <div style="font-size:12.5px; color:var(--ink);">Couriers Please DIFOT of 88% is below the 90% operational threshold. With 33% of your volume on CP, this affects 370 consignments/quarter. Recommend formal SLA conversation with CP account manager.</div>
+        </div>
+        <div class="alt-row" style="padding:8px 0; border-bottom:1px solid #f0f0f0;">
+          <span class="kpi-delta warn" style="margin:0 8px 0 0; white-space:nowrap;">CP pickup</span>
+          <div style="font-size:12.5px; color:var(--ink);">CP pickup on-time (CIFOT) of 82% is low. Late pickups cascade into late deliveries. Investigate driver schedule or consider earlier manifest cutoff time.</div>
+        </div>
+        <div class="alt-row" style="padding:8px 0;">
+          <span class="kpi-delta up" style="margin:0 8px 0 0; white-space:nowrap;">AusPost</span>
+          <div style="font-size:12.5px; color:var(--ink);">AusPost leading on delivery performance (94% DIFOT, 97% CIFOT). Cost premium vs CP is partially offset by fewer customer service contacts from failed deliveries.</div>
+        </div>
+      </div>
+      <div style="margin-top:12px; padding:8px; background:#f8f9fa; border-radius:5px; font-size:11.5px; color:var(--ink-faint);">
+        Metric definitions: DIFOT = Delivered In Full On Time. CIFOT = Collected In Full On Time (pickup SLA). First attempt = no redelivery required. Source: <code>CORE.ANALYTICS.COURIER_PERFORMANCE</code> + order tracking data.
+      </div>
     </div>
   </div>
 </div>
@@ -712,6 +894,7 @@ let activeMonth = 'all';
 // ══════════════════════════════════════════
 const fmt = (n) => '$' + Math.round(n).toLocaleString('en-AU');
 const fmtDec = (n) => '$' + (+n).toFixed(2);
+const fmtAxis = (v) => v >= 1000 ? '$' + (v/1000).toFixed(0) + 'k' : '$' + Math.round(v);
 
 function getCarrierColor(carrier) {
   return { all: '#43a047', auspost: '#c8102e', cp: '#d97706', aramex: '#c2410c' }[carrier] || '#43a047';
@@ -764,7 +947,7 @@ function initCharts() {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + fmt(ctx.raw) } } },
       scales: {
-        y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#f0f0f0' } },
+        y: { ticks: { callback: fmtAxis }, grid: { color: '#f0f0f0' } },
         x: { grid: { display: false } }
       }
     }
@@ -796,7 +979,7 @@ function initCharts() {
   charts.carrierAvg = new Chart(document.getElementById('chart-carrier-avg'), {
     type: 'bar',
     data: {
-      labels: ['AusPost', 'Couriers Please', 'Aramex', 'FG Benchmark'],
+      labels: ['AusPost', 'Couriers Please', 'Aramex', 'AU benchmark'],
       datasets: [{
         label: 'Avg cost / con.',
         data: [21.34, 17.94, 19.98, 16.40],
@@ -855,7 +1038,7 @@ function initCharts() {
       plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + fmt(ctx.raw) } } },
       scales: {
         x: { stacked: true, grid: { display: false } },
-        y: { stacked: true, ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#f0f0f0' } }
+        y: { stacked: true, ticks: { callback: fmtAxis }, grid: { color: '#f0f0f0' } }
       }
     }
   });
@@ -877,7 +1060,7 @@ function initCharts() {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + fmt(ctx.raw) } } },
       scales: {
-        x: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#f0f0f0' } },
+        x: { ticks: { callback: fmtAxis }, grid: { color: '#f0f0f0' } },
         y: { grid: { display: false } }
       }
     }
@@ -951,7 +1134,7 @@ function initCharts() {
   charts.dimRate = new Chart(document.getElementById('chart-dim-rate'), {
     type: 'bar',
     data: {
-      labels: ['AusPost', 'Couriers Please', 'Aramex', 'FG Benchmark'],
+      labels: ['AusPost', 'Couriers Please', 'Aramex', 'AU benchmark'],
       datasets: [{
         label: '% billed on DIM weight',
         data: [72, 58, 80, 48],
@@ -1033,7 +1216,89 @@ function initCharts() {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + fmt(Math.abs(ctx.raw)) } } },
       scales: {
-        y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#f0f0f0' } },
+        y: { ticks: { callback: fmtAxis }, grid: { color: '#f0f0f0' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+
+  // ── Carrier Health: DIFOT bar ──
+  charts.difot = new Chart(document.getElementById('chart-difot'), {
+    type: 'bar',
+    data: {
+      labels: ['AusPost', 'Couriers Please', 'Aramex'],
+      datasets: [
+        {
+          label: 'DIFOT %',
+          data: [94, 88, 91],
+          backgroundColor: ['rgba(200,16,46,.85)', 'rgba(217,119,6,.85)', 'rgba(194,65,12,.85)'],
+          borderRadius: 5, barThickness: 42,
+        },
+        {
+          label: 'Benchmark (95%)',
+          data: [95, 95, 95],
+          type: 'line',
+          borderColor: '#43a047',
+          borderWidth: 2,
+          borderDash: [5,4],
+          pointRadius: 0,
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + ctx.raw + '%' } }
+      },
+      scales: {
+        y: { min: 75, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f0f0f0' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── Carrier Health: First attempt bar ──
+  charts.firstAttempt = new Chart(document.getElementById('chart-first-attempt'), {
+    type: 'bar',
+    data: {
+      labels: ['AusPost', 'Couriers Please', 'Aramex'],
+      datasets: [{
+        label: 'First attempt delivery %',
+        data: [91, 85, 88],
+        backgroundColor: ['rgba(200,16,46,.85)', 'rgba(217,119,6,.85)', 'rgba(194,65,12,.85)'],
+        borderRadius: 5, barThickness: 42,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + ctx.raw + '%' } } },
+      scales: {
+        y: { min: 75, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f0f0f0' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── Carrier Health: CIFOT bar ──
+  charts.cifot = new Chart(document.getElementById('chart-cifot'), {
+    type: 'bar',
+    data: {
+      labels: ['AusPost', 'Couriers Please', 'Aramex'],
+      datasets: [{
+        label: 'CIFOT (pickup on time) %',
+        data: [97, 82, 89],
+        backgroundColor: ['rgba(200,16,46,.85)', 'rgba(217,119,6,.85)', 'rgba(194,65,12,.85)'],
+        borderRadius: 5, barThickness: 42,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + ctx.raw + '%' } } },
+      scales: {
+        y: { min: 70, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f0f0f0' } },
         x: { grid: { display: false } }
       }
     }
