@@ -332,6 +332,7 @@
     <a href="#freeshipping">Free shipping</a>
     <a href="#savings">Savings</a>
     <a href="#recommendations">Recommendations</a>
+    <a href="#dashboard">Dashboard</a>
   </nav>
 
   <!-- OVERVIEW -->
@@ -718,6 +719,63 @@
   <div class="disclaimer">
     FG Styles Co. is a fictional business. Data is representative of real FreightGauge analysis methodology. Your findings will reflect your carrier agreements, shipping profile, and platform.
   </div>
+
+
+  <section id="dashboard" class="demo-section">
+    <div class="d-label fade-up">Looker Studio Dashboard</div>
+    <div class="d-title fade-up">Your data. Interactive. Always on.</div>
+    <p class="d-sub fade-up" style="margin-bottom:24px;">Every Standard and Premium engagement includes a Looker Studio dashboard — same data as the report, but filterable by carrier, state, and month. Bookmark it. Share it with your ops team. Come back when you need to re-check a number.</p>
+
+    <div class="panel fade-up" style="padding:0; overflow:hidden; border-radius:14px;">
+      <!-- Preview bar mimicking Looker Studio header -->
+      <div style="background:var(--fg-dark); padding:12px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:7px; height:7px; border-radius:50%; background:#43a047;"></div>
+          <span style="color:rgba(255,255,255,.85); font-size:13px; font-weight:600;">FG Styles Co. &mdash; Q1 2025 Freight Dashboard</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); border-radius:4px; padding:3px 10px; color:rgba(255,255,255,.75); font-size:11.5px; font-weight:500;">1 Jan &ndash; 31 Mar 2025</span>
+          <span style="color:rgba(255,255,255,.35); font-size:11px;">5 pages &middot; interactive</span>
+        </div>
+      </div>
+      <!-- Tab bar preview -->
+      <div style="background:#fff; border-bottom:1px solid var(--border); padding:0 20px; display:flex; gap:0; overflow-x:auto;">
+        <div style="padding:10px 16px; font-size:12.5px; font-weight:700; color:var(--fg-dark); border-bottom:3px solid var(--fg-acc);">Overview</div>
+        <div style="padding:10px 16px; font-size:12.5px; color:var(--ink-muted); border-bottom:3px solid transparent;">Carriers</div>
+        <div style="padding:10px 16px; font-size:12.5px; color:var(--ink-muted); border-bottom:3px solid transparent;">Geography</div>
+        <div style="padding:10px 16px; font-size:12.5px; color:var(--ink-muted); border-bottom:3px solid transparent;">Weight &amp; DIM</div>
+        <div style="padding:10px 16px; font-size:12.5px; color:var(--ink-muted); border-bottom:3px solid transparent;">Shipping Margin</div>
+      </div>
+      <!-- CTA -->
+      <div style="background:#f8fdf8; padding:32px 28px; text-align:center;">
+        <p style="font-size:14px; color:var(--ink-muted); margin-bottom:20px; max-width:460px; margin-left:auto; margin-right:auto; line-height:1.6;">Filter by carrier. Drill into geography. Model your free shipping threshold. This is the FG Styles Co. demo dashboard &mdash; fully interactive.</p>
+        <a href="looker-demo.html" class="btn-cta" style="display:inline-flex; align-items:center; gap:8px; background:var(--fg-dark); color:#fff; padding:13px 28px; border-radius:8px; font-size:14px; font-weight:700; text-decoration:none; transition:background .15s;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+          Open Looker Studio dashboard
+        </a>
+        <p style="font-size:11.5px; color:var(--ink-faint); margin-top:12px;">FG Styles Co. is a fictional business &middot; data is representative</p>
+      </div>
+    </div>
+
+    <!-- Feature callouts -->
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px;">
+      <div class="panel fade-up" style="padding:16px 18px;">
+        <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--fg-acc); margin-bottom:6px;">Filter &amp; Drill</div>
+        <div style="font-size:13.5px; font-weight:700; color:var(--fg-dark); margin-bottom:4px;">Carrier &amp; state filters</div>
+        <p style="font-size:12.5px; color:var(--ink-muted); line-height:1.5;">Every chart updates in real time when you filter by AusPost, Couriers Please, or Aramex.</p>
+      </div>
+      <div class="panel fade-up" style="padding:16px 18px;">
+        <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--fg-acc); margin-bottom:6px;">Model Scenarios</div>
+        <div style="font-size:13.5px; font-weight:700; color:var(--fg-dark); margin-bottom:4px;">Interactive threshold slider</div>
+        <p style="font-size:12.5px; color:var(--ink-muted); line-height:1.5;">Drag the free shipping threshold and see the quarterly saving update instantly.</p>
+      </div>
+      <div class="panel fade-up" style="padding:16px 18px;">
+        <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--fg-acc); margin-bottom:6px;">Always Available</div>
+        <div style="font-size:13.5px; font-weight:700; color:var(--fg-dark); margin-bottom:4px;">Shareable link</div>
+        <p style="font-size:12.5px; color:var(--ink-muted); line-height:1.5;">Bookmark it, share with your 3PL, or revisit when you need to check a number before a carrier negotiation.</p>
+      </div>
+    </div>
+  </section>
 
   <div class="cta-band fade-up">
     <h2>Ready to see <em>your</em> numbers?</h2>

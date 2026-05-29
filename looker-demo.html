@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FG Styles Co. — Q1 2025 Freight Dashboard | FreightGauge</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --fg-dark: #1a3d1f;
+  --fg-mid: #2d6831;
+  --fg-acc: #43a047;
+  --fg-light: #e8f5e9;
+  --ink: #202124;
+  --ink-muted: #5f6368;
+  --ink-faint: #9aa0a6;
+  --border: #e0e0e0;
+  --card-bg: #fff;
+  --page-bg: #f1f3f4;
+  --ap-red: #c8102e;
+  --cp-yellow: #d97706;
+  --ax-orange: #c2410c;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background: var(--page-bg); color: var(--ink); min-height: 100vh; }
+
+/* ── HEADER ── */
+.ls-header {
+  background: var(--fg-dark);
+  padding: 0 20px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 4px rgba(0,0,0,.3);
+}
+.ls-header-left { display: flex; align-items: center; gap: 12px; }
+.ls-logo { display: flex; align-items: center; gap: 7px; text-decoration: none; }
+.ls-logo img { height: 24px; width: auto; filter: brightness(0) invert(1); opacity: .9; }
+.ls-logo-text { color: rgba(255,255,255,.9); font-size: 13px; font-weight: 700; letter-spacing: .3px; }
+.ls-divider-v { width: 1px; height: 20px; background: rgba(255,255,255,.2); }
+.ls-report-title { color: rgba(255,255,255,.85); font-size: 13.5px; font-weight: 500; }
+.ls-header-right { display: flex; align-items: center; gap: 16px; }
+.ls-date-chip {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 4px;
+  padding: 4px 10px;
+  color: rgba(255,255,255,.8);
+  font-size: 12px;
+  font-weight: 500;
+}
+.ls-updated { color: rgba(255,255,255,.4); font-size: 11px; }
+
+/* ── TABS ── */
+.ls-tabs {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+.ls-tab {
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s, border-color .15s;
+}
+.ls-tab:hover { color: var(--fg-acc); }
+.ls-tab.active { color: var(--fg-dark); border-bottom-color: var(--fg-acc); font-weight: 700; }
+
+/* ── FILTER BAR ── */
+.ls-filters {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ls-filter-label { font-size: 12px; color: var(--ink-faint); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-right: 4px; }
+.ls-chip {
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: var(--ink-muted);
+  transition: all .15s;
+}
+.ls-chip:hover { border-color: var(--fg-acc); color: var(--fg-dark); }
+.ls-chip.active { background: var(--fg-dark); border-color: var(--fg-dark); color: #fff; }
+.ls-chip.ap.active { background: var(--ap-red); border-color: var(--ap-red); }
+.ls-chip.cp.active { background: var(--cp-yellow); border-color: var(--cp-yellow); }
+.ls-chip.ax.active { background: var(--ax-orange); border-color: var(--ax-orange); }
+
+/* ── PAGES ── */
+.ls-page { display: none; padding: 20px; }
+.ls-page.active { display: block; }
+
+/* ── CARDS ── */
+.ls-row { display: grid; gap: 12px; margin-bottom: 12px; }
+.ls-row-4 { grid-template-columns: repeat(4, 1fr); }
+.ls-row-2 { grid-template-columns: repeat(2, 1fr); }
+.ls-row-3 { grid-template-columns: repeat(3, 1fr); }
+.ls-row-21 { grid-template-columns: 2fr 1fr; }
+.ls-row-12 { grid-template-columns: 1fr 2fr; }
+
+.card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 16px 18px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+}
+.card-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+  color: var(--ink-faint);
+  margin-bottom: 12px;
+}
+
+/* ── KPI SCORECARD ── */
+.kpi-value { font-size: 28px; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 4px; }
+.kpi-value.green { color: var(--fg-acc); }
+.kpi-value.red { color: #d32f2f; }
+.kpi-sub { font-size: 12px; color: var(--ink-faint); line-height: 1.4; }
+.kpi-delta { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; font-weight: 700; margin-top: 5px; padding: 2px 7px; border-radius: 4px; }
+.kpi-delta.up { background: #e8f5e9; color: #2e7d32; }
+.kpi-delta.down { background: #ffebee; color: #c62828; }
+.kpi-delta.warn { background: #fff8e1; color: #e65100; }
+
+/* ── CHART CONTAINER ── */
+.chart-wrap { position: relative; width: 100%; }
+.chart-wrap canvas { width: 100% !important; }
+
+/* ── TABLE ── */
+.ls-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.ls-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--ink-faint); padding: 6px 10px; border-bottom: 1.5px solid var(--border); }
+.ls-table th:not(:first-child) { text-align: right; }
+.ls-table td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; color: var(--ink); }
+.ls-table td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+.ls-table tr:last-child td { border-bottom: none; }
+.ls-table tr.total-row td { font-weight: 700; background: #f8f9fa; border-top: 1.5px solid var(--border); border-bottom: none; }
+.ls-table tr:hover td { background: #f8fdf8; }
+
+/* ── CARRIER BADGE ── */
+.cbadge { display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; }
+.cbadge.ap { background: #fde8ea; color: var(--ap-red); }
+.cbadge.cp { background: #fffde7; color: var(--cp-yellow); border: 1px solid #fcd34d; }
+.cbadge.ax { background: #fff3e0; color: var(--ax-orange); }
+
+/* ── DIM GAUGE ── */
+.gauge-row { display: flex; align-items: flex-end; gap: 20px; padding: 8px 0; }
+.gauge-item { flex: 1; text-align: center; }
+.gauge-bar-bg { background: #eeeeee; border-radius: 4px 4px 0 0; height: 120px; display: flex; align-items: flex-end; overflow: hidden; }
+.gauge-bar-fill { width: 100%; border-radius: 4px 4px 0 0; transition: height .4s; }
+.gauge-pct { font-size: 20px; font-weight: 800; margin: 6px 0 2px; }
+.gauge-lbl { font-size: 11px; color: var(--ink-faint); }
+
+/* ── THRESHOLD SLIDER ── */
+.slider-wrap { padding: 10px 0; }
+.slider-row { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.slider-label { font-size: 13px; color: var(--ink-muted); white-space: nowrap; min-width: 160px; }
+.threshold-slider {
+  -webkit-appearance: none; appearance: none;
+  flex: 1; height: 5px; background: #e0e0e0; border-radius: 3px; outline: none;
+}
+.threshold-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--fg-dark); cursor: pointer;
+  border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3);
+}
+.slider-value { font-size: 14px; font-weight: 800; color: var(--fg-dark); min-width: 50px; text-align: right; }
+.impact-panel {
+  background: var(--fg-light);
+  border: 1px solid #c5ddc7;
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+.impact-item { text-align: center; }
+.impact-val { font-size: 18px; font-weight: 800; color: var(--fg-dark); }
+.impact-lbl { font-size: 11px; color: var(--ink-faint); margin-top: 2px; }
+
+/* ── ALT CARRIER PANEL ── */
+.alt-panel { background: #f8fdf8; border: 1px solid #c5ddc7; border-radius: 8px; padding: 14px 16px; }
+.alt-panel-title { font-size: 11.5px; font-weight: 700; color: var(--fg-dark); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .5px; }
+.alt-row { display: flex; align-items: flex-start; gap: 9px; padding: 8px 0; border-bottom: 1px solid #e8f0e9; }
+.alt-row:last-child { border-bottom: none; padding-bottom: 0; }
+.alt-tag { font-size: 9.5px; font-weight: 800; padding: 2px 7px; border-radius: 4px; white-space: nowrap; margin-top: 1px; text-transform: uppercase; }
+.tag-eval { background: #e8f5e9; color: var(--fg-dark); }
+.tag-no { background: #fce4ec; color: #c62828; }
+.alt-txt { font-size: 12px; color: var(--ink-muted); line-height: 1.5; }
+.alt-txt strong { color: var(--ink); }
+
+/* ── SECTION HEADER ── */
+.page-section-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--ink-faint); margin-bottom: 8px; margin-top: 4px; }
+
+/* ── ANOMALY CARDS ── */
+.anomaly-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 4px; }
+.anomaly-card { background: #fff; border: 1px solid var(--border); border-radius: 7px; padding: 12px 14px; text-align: center; }
+.anomaly-card.flagged { border-color: #ffcdd2; background: #fff5f5; }
+.anomaly-num { font-size: 22px; font-weight: 800; color: var(--ink); }
+.anomaly-card.flagged .anomaly-num { color: #c62828; }
+.anomaly-lbl { font-size: 11px; color: var(--ink-faint); margin-top: 3px; }
+
+/* ── BACK LINK ── */
+.ls-back-bar { background: var(--fg-light); border-bottom: 1px solid #c5ddc7; padding: 8px 20px; font-size: 12px; }
+.ls-back-bar a { color: var(--fg-mid); font-weight: 600; text-decoration: none; }
+.ls-back-bar a:hover { text-decoration: underline; }
+
+@media (max-width: 768px) {
+  .ls-row-4 { grid-template-columns: repeat(2, 1fr); }
+  .ls-row-21, .ls-row-12 { grid-template-columns: 1fr; }
+  .ls-row-3 { grid-template-columns: 1fr; }
+  .anomaly-grid { grid-template-columns: repeat(2, 1fr); }
+  .impact-panel { grid-template-columns: repeat(3, 1fr); }
+  .ls-header-right .ls-updated { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- BACK BAR -->
+<div class="ls-back-bar">
+  <a href="demo.html">&#8592; Back to interactive report demo</a>
+</div>
+
+<!-- HEADER -->
+<div class="ls-header">
+  <div class="ls-header-left">
+    <a href="index.html" class="ls-logo">
+      <img src="FreightGauge%20Logo.png" alt="FreightGauge">
+      <span class="ls-logo-text">FreightGauge</span>
+    </a>
+    <div class="ls-divider-v"></div>
+    <span class="ls-report-title">FG Styles Co. &mdash; Q1 2025 Freight Dashboard</span>
+  </div>
+  <div class="ls-header-right">
+    <div class="ls-date-chip">1 Jan &ndash; 31 Mar 2025</div>
+    <div class="ls-updated">Delivered May 2025</div>
+  </div>
+</div>
+
+<!-- PAGE TABS -->
+<div class="ls-tabs">
+  <button class="ls-tab active" data-page="overview">Overview</button>
+  <button class="ls-tab" data-page="carriers">Carriers</button>
+  <button class="ls-tab" data-page="geography">Geography</button>
+  <button class="ls-tab" data-page="weight">Weight &amp; DIM</button>
+  <button class="ls-tab" data-page="margin">Shipping Margin</button>
+</div>
+
+<!-- CARRIER FILTER -->
+<div class="ls-filters">
+  <span class="ls-filter-label">Carrier</span>
+  <button class="ls-chip active" data-carrier="all">All carriers</button>
+  <button class="ls-chip ap" data-carrier="auspost">AusPost</button>
+  <button class="ls-chip cp" data-carrier="cp">Couriers Please</button>
+  <button class="ls-chip ax" data-carrier="aramex">Aramex</button>
+</div>
+
+<!-- ═══ PAGE: OVERVIEW ═══ -->
+<div class="ls-page active" id="page-overview">
+  <div class="ls-row ls-row-4">
+    <div class="card">
+      <div class="card-title">Total Freight Spend</div>
+      <div class="kpi-value" id="kpi-spend">$25,350</div>
+      <div class="kpi-sub">Q1 2025 &middot; all carriers</div>
+      <div class="kpi-delta warn">&#9650; 6.2% vs Q4 2024</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Consignments</div>
+      <div class="kpi-value" id="kpi-cons">1,260</div>
+      <div class="kpi-sub">$420/mo average</div>
+      <div class="kpi-delta up">&#9650; 4.1% vs Q4 2024</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Avg Cost / Consignment</div>
+      <div class="kpi-value red" id="kpi-avg">$20.12</div>
+      <div class="kpi-sub">FG benchmark: $16.40</div>
+      <div class="kpi-delta down">+$3.72 above benchmark</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Identified Savings</div>
+      <div class="kpi-value green">$16,680</div>
+      <div class="kpi-sub">Annualised &middot; 4 actions</div>
+      <div class="kpi-delta up">Achievable &lt; 60 days</div>
+    </div>
+  </div>
+
+  <div class="ls-row ls-row-21">
+    <div class="card">
+      <div class="card-title">Monthly Spend Trend</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="chart-monthly-trend"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Spend by Carrier</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="chart-carrier-donut"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Carrier Summary</div>
+    <table class="ls-table">
+      <thead>
+        <tr>
+          <th>Carrier</th>
+          <th>Consignments</th>
+          <th>Share</th>
+          <th>Total Spend</th>
+          <th>Avg / Con.</th>
+          <th>vs Benchmark</th>
+          <th>DIM Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="cbadge ap">AusPost</span></td>
+          <td>760</td><td>60.3%</td><td>$16,215</td><td>$21.34</td>
+          <td style="color:#c62828; font-weight:700;">+$4.94</td>
+          <td style="color:#c62828;">72%</td>
+        </tr>
+        <tr>
+          <td><span class="cbadge cp">Couriers Please</span></td>
+          <td>420</td><td>33.3%</td><td>$7,537</td><td>$17.94</td>
+          <td style="color:#2e7d32; font-weight:700;">+$1.54</td>
+          <td style="color:#e65100;">58%</td>
+        </tr>
+        <tr>
+          <td><span class="cbadge ax">Aramex</span></td>
+          <td>80</td><td>6.3%</td><td>$1,598</td><td>$19.98</td>
+          <td style="color:#c62828; font-weight:700;">+$3.58</td>
+          <td style="color:#c62828;">80%</td>
+        </tr>
+        <tr class="total-row">
+          <td>All carriers</td>
+          <td>1,260</td><td>100%</td><td>$25,350</td><td>$20.12</td>
+          <td style="color:#c62828; font-weight:700;">+$3.72</td>
+          <td style="color:#c62828;">71%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ PAGE: CARRIERS ═══ -->
+<div class="ls-page" id="page-carriers">
+  <div class="ls-row ls-row-3">
+    <div class="card" style="border-top: 3px solid var(--ap-red);">
+      <div class="card-title" style="color: var(--ap-red);">AusPost</div>
+      <div class="kpi-value">760 <span style="font-size:14px; font-weight:400; color:var(--ink-faint)">cons</span></div>
+      <div style="margin: 6px 0; font-size:22px; font-weight:800; color:var(--ink)">$16,215</div>
+      <div class="kpi-sub">$21.34 avg &middot; 72% DIM billed</div>
+      <div class="kpi-delta down" style="margin-top:8px">22% above CP for same zones</div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--cp-yellow);">
+      <div class="card-title" style="color: var(--cp-yellow);">Couriers Please</div>
+      <div class="kpi-value">420 <span style="font-size:14px; font-weight:400; color:var(--ink-faint)">cons</span></div>
+      <div style="margin: 6px 0; font-size:22px; font-weight:800; color:var(--ink)">$7,537</div>
+      <div class="kpi-sub">$17.94 avg &middot; 58% DIM billed</div>
+      <div class="kpi-delta up" style="margin-top:8px">Best avg rate of active carriers</div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--ax-orange);">
+      <div class="card-title" style="color: var(--ax-orange);">Aramex</div>
+      <div class="kpi-value">80 <span style="font-size:14px; font-weight:400; color:var(--ink-faint)">cons</span></div>
+      <div style="margin: 6px 0; font-size:22px; font-weight:800; color:var(--ink)">$1,598</div>
+      <div class="kpi-sub">$19.98 avg &middot; 80% DIM billed</div>
+      <div class="kpi-delta warn" style="margin-top:8px">Highest DIM rate of 3 carriers</div>
+    </div>
+  </div>
+
+  <div class="ls-row ls-row-2">
+    <div class="card">
+      <div class="card-title">Avg Cost per Consignment — Carrier Comparison</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="chart-carrier-avg"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Consignment Volume by Carrier</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="chart-carrier-vol"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="ls-row ls-row-2">
+    <div class="card">
+      <div class="card-title">Spend Composition by Charge Type</div>
+      <div class="chart-wrap" style="height:200px">
+        <canvas id="chart-charge-type"></canvas>
+      </div>
+    </div>
+    <div class="alt-panel" style="align-self:start;">
+      <div class="alt-panel-title">Carrier Alternatives Assessed</div>
+      <div class="alt-row">
+        <span class="alt-tag tag-eval">Evaluate</span>
+        <div class="alt-txt"><strong>Uber Direct</strong> &mdash; 34% of orders within 15km of Alexandria warehouse. Est. $6.50&ndash;$9.00 per con vs $18&ndash;22 AusPost metro. $2,800/yr saving.</div>
+      </div>
+      <div class="alt-row">
+        <span class="alt-tag tag-eval">Evaluate</span>
+        <div class="alt-txt"><strong>StarTrack</strong> &mdash; For orders $180+, premium tracking reduces returns freight and CS contacts. ~120 orders/quarter in this band.</div>
+      </div>
+      <div class="alt-row">
+        <span class="alt-tag tag-no">Not Recommended</span>
+        <div class="alt-txt"><strong>Sendle</strong> &mdash; Coverage gaps in regional NSW and QLD affect ~18% of your delivery postcodes.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: GEOGRAPHY ═══ -->
+<div class="ls-page" id="page-geography">
+  <div class="ls-row ls-row-2">
+    <div class="card">
+      <div class="card-title">Freight Spend by State</div>
+      <div class="chart-wrap" style="height:240px">
+        <canvas id="chart-state-spend"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Consignment Volume by State</div>
+      <div class="chart-wrap" style="height:240px">
+        <canvas id="chart-state-cons"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="ls-row ls-row-12">
+    <div class="card">
+      <div class="card-title">Delivery Zone Breakdown</div>
+      <div class="chart-wrap" style="height:180px">
+        <canvas id="chart-zone"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Top 10 Postcodes by Freight Spend</div>
+      <table class="ls-table">
+        <thead>
+          <tr><th>Postcode</th><th>Suburb</th><th>State</th><th>Cons.</th><th>Spend</th><th>Avg</th></tr>
+        </thead>
+        <tbody id="postcode-table-body">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: WEIGHT & DIM ═══ -->
+<div class="ls-page" id="page-weight">
+  <div class="ls-row ls-row-4">
+    <div class="card">
+      <div class="card-title">Overall DIM Rate</div>
+      <div class="kpi-value red">71%</div>
+      <div class="kpi-sub">895 of 1,260 cons billed on DIM weight</div>
+      <div class="kpi-delta down">FG benchmark: 48%</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Excess DIM vs Benchmark</div>
+      <div class="kpi-value red">+23 pts</div>
+      <div class="kpi-sub">Primary driver: oversized packaging</div>
+      <div class="kpi-delta down">Est. $1,200/quarter overcharge</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Avg DIM Weight</div>
+      <div class="kpi-value">1.42 kg</div>
+      <div class="kpi-sub">Avg actual weight: 0.74 kg</div>
+      <div class="kpi-delta warn">1.9x actual weight</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Anomalies Flagged</div>
+      <div class="kpi-value red">38</div>
+      <div class="kpi-sub">Recoverable: $340&ndash;$480</div>
+      <div class="kpi-delta down">Raise dispute with carriers</div>
+    </div>
+  </div>
+
+  <div class="ls-row ls-row-2">
+    <div class="card">
+      <div class="card-title">Weight Band Distribution</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="chart-weight-band"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">DIM Billing Rate by Carrier vs Benchmark</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="chart-dim-rate"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Anomaly Breakdown</div>
+    <div class="anomaly-grid">
+      <div class="anomaly-card flagged">
+        <div class="anomaly-num">4</div>
+        <div class="anomaly-lbl">Duplicate billing events</div>
+      </div>
+      <div class="anomaly-card flagged">
+        <div class="anomaly-num">22</div>
+        <div class="anomaly-lbl">Weight class mismatches</div>
+      </div>
+      <div class="anomaly-card flagged">
+        <div class="anomaly-num">12</div>
+        <div class="anomaly-lbl">Incorrect surcharges</div>
+      </div>
+      <div class="anomaly-card">
+        <div class="anomaly-num">$410</div>
+        <div class="anomaly-lbl">Est. recoverable (mid)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: SHIPPING MARGIN ═══ -->
+<div class="ls-page" id="page-margin">
+  <div class="ls-row ls-row-4">
+    <div class="card">
+      <div class="card-title">Free Shipping Rate</div>
+      <div class="kpi-value red">58%</div>
+      <div class="kpi-sub">731 of 1,260 orders at $75 threshold</div>
+      <div class="kpi-delta down">Threshold too low for your AOV</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Avg Order Value</div>
+      <div class="kpi-value">$94</div>
+      <div class="kpi-sub">Current threshold: $75</div>
+      <div class="kpi-delta warn">Gap of only $19 to threshold</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Freight Subsidised / Qtr</div>
+      <div class="kpi-value red">$8,220</div>
+      <div class="kpi-sub">32% of total freight spend</div>
+      <div class="kpi-delta down">Cost absorbed on free orders</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Saving at $95 Threshold</div>
+      <div class="kpi-value green">$8,400</div>
+      <div class="kpi-sub">Annualised &middot; low conversion impact</div>
+      <div class="kpi-delta up">Highest-impact single action</div>
+    </div>
+  </div>
+
+  <div class="ls-row ls-row-2">
+    <div class="card">
+      <div class="card-title">Free vs Paid Shipping by Order Value Band</div>
+      <div class="chart-wrap" style="height:220px">
+        <canvas id="chart-free-shipping"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Free Shipping Threshold Modeller</div>
+      <div class="slider-wrap">
+        <div class="slider-row">
+          <span class="slider-label">Free shipping threshold</span>
+          <input type="range" class="threshold-slider" id="threshold-slider" min="50" max="150" value="75" step="5">
+          <span class="slider-value" id="threshold-display">$75</span>
+        </div>
+        <div style="font-size:12px; color:var(--ink-faint); margin-bottom:10px;">Drag to model different threshold values</div>
+        <div class="impact-panel" id="impact-panel">
+          <div class="impact-item">
+            <div class="impact-val" id="impact-qualify">58%</div>
+            <div class="impact-lbl">Orders qualify</div>
+          </div>
+          <div class="impact-item">
+            <div class="impact-val" id="impact-cost">$8,220</div>
+            <div class="impact-lbl">Freight subsidised / qtr</div>
+          </div>
+          <div class="impact-item">
+            <div class="impact-val" id="impact-saving">$0</div>
+            <div class="impact-lbl">Quarterly saving vs current</div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-wrap" style="height:130px; margin-top:12px;">
+        <canvas id="chart-threshold-model"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Freight Margin — Charged to Customer vs Cost</div>
+    <div class="chart-wrap" style="height:160px">
+      <canvas id="chart-margin-waterfall"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DATA MODEL
+// ══════════════════════════════════════════
+const DATA = {
+  carriers: {
+    all:     { cons: 1260, spend: 25350, avg: 20.12, dimRate: 71, label: 'All Carriers', color: '#43a047' },
+    auspost: { cons: 760,  spend: 16215, avg: 21.34, dimRate: 72, label: 'AusPost',        color: '#c8102e' },
+    cp:      { cons: 420,  spend: 7537,  avg: 17.94, dimRate: 58, label: 'Couriers Please', color: '#d97706' },
+    aramex:  { cons: 80,   spend: 1598,  avg: 19.98, dimRate: 80, label: 'Aramex',          color: '#c2410c' },
+  },
+  monthly: {
+    labels: ['January', 'February', 'March'],
+    all:     [8872, 7858, 8620],
+    auspost: [5675, 5026, 5514],
+    cp:      [2638, 2332, 2567],
+    aramex:  [559,  500,  539],
+  },
+  states: {
+    labels: ['NSW', 'VIC', 'QLD', 'WA', 'SA', 'Other'],
+    spend:  [9653, 6340, 3802, 2534, 1529, 1492],
+    cons:   [480,  315,  189,  126,  76,   74],
+  },
+  postcodes: [
+    { code: '2000', suburb: 'Sydney CBD',    state: 'NSW', cons: 58, spend: 1240, avg: 21.38 },
+    { code: '3000', suburb: 'Melbourne CBD', state: 'VIC', cons: 42, spend: 895,  avg: 21.31 },
+    { code: '4000', suburb: 'Brisbane CBD',  state: 'QLD', cons: 34, spend: 724,  avg: 21.29 },
+    { code: '2010', suburb: 'Surry Hills',   state: 'NSW', cons: 32, spend: 682,  avg: 21.31 },
+    { code: '2060', suburb: 'North Sydney',  state: 'NSW', cons: 29, spend: 618,  avg: 21.31 },
+    { code: '3121', suburb: 'Richmond VIC',  state: 'VIC', cons: 27, spend: 485,  avg: 17.96 },
+    { code: '2077', suburb: 'Turramurra',    state: 'NSW', cons: 24, spend: 460,  avg: 19.17 },
+    { code: '5000', suburb: 'Adelaide CBD',  state: 'SA',  cons: 22, spend: 442,  avg: 20.09 },
+    { code: '2150', suburb: 'Parramatta',    state: 'NSW', cons: 21, spend: 399,  avg: 19.00 },
+    { code: '6000', suburb: 'Perth CBD',     state: 'WA',  cons: 19, spend: 380,  avg: 20.00 },
+  ],
+  weightBands: {
+    labels: ['0-0.5 kg', '0.5-1 kg', '1-2 kg', '2-5 kg', '5 kg+'],
+    all:     [280, 378, 378, 189, 35],
+    auspost: [168, 228, 228, 114, 22],
+    cp:      [93,  126, 126, 63,  12],
+    aramex:  [17,  22,  24,  14,   3],
+  },
+  chargeTypes: {
+    labels: ['Base freight', 'DIM surcharge', 'Residential', 'Fuel levy'],
+    auspost: [12460, 2180, 930, 645],
+    cp:      [6090,  840,  0,   607],
+    aramex:  [1260,  220,  0,   118],
+  },
+  freeShipping: {
+    bands:       ['$0-49', '$50-74', '$75-94', '$95-124', '$125-149', '$150+'],
+    orders:      [85,  156, 490,  312,  134,  83],
+    freePct:     [0,   0,   100,  0,    0,    0],
+  },
+  zone: {
+    labels: ['Metro (≤15km)', 'Suburban (15-50km)', 'Regional (50km+)'],
+    cons:   [428, 567, 265],
+    colors: ['#43a047', '#66bb6a', '#a5d6a7'],
+  },
+};
+
+let activeCarrier = 'all';
+
+// ══════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════
+const fmt = (n) => '$' + n.toLocaleString('en-AU', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+const fmtDec = (n) => '$' + n.toFixed(2);
+
+function getCarrierColor(carrier) {
+  const colors = { all: '#43a047', auspost: '#c8102e', cp: '#d97706', aramex: '#c2410c' };
+  return colors[carrier] || '#43a047';
+}
+
+// ══════════════════════════════════════════
+// CHART DEFAULTS
+// ══════════════════════════════════════════
+Chart.defaults.font.family = '-apple-system, "Google Sans", Arial, sans-serif';
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#5f6368';
+Chart.defaults.plugins.legend.labels.boxWidth = 10;
+Chart.defaults.plugins.legend.labels.padding = 12;
+
+// ══════════════════════════════════════════
+// CHART INSTANCES
+// ══════════════════════════════════════════
+let charts = {};
+
+function initCharts() {
+  // ── Overview: Monthly trend ──
+  charts.monthlyTrend = new Chart(document.getElementById('chart-monthly-trend'), {
+    type: 'line',
+    data: {
+      labels: DATA.monthly.labels,
+      datasets: [{
+        label: 'Freight spend',
+        data: DATA.monthly.all,
+        borderColor: '#43a047',
+        backgroundColor: 'rgba(67,160,71,.1)',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#43a047',
+        pointRadius: 5,
+        fill: true,
+        tension: .35,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + fmt(ctx.raw) } } },
+      scales: {
+        y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#f0f0f0' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── Overview: Carrier donut ──
+  charts.carrierDonut = new Chart(document.getElementById('chart-carrier-donut'), {
+    type: 'doughnut',
+    data: {
+      labels: ['AusPost', 'Couriers Please', 'Aramex'],
+      datasets: [{
+        data: [DATA.carriers.auspost.spend, DATA.carriers.cp.spend, DATA.carriers.aramex.spend],
+        backgroundColor: ['#c8102e', '#d97706', '#c2410c'],
+        borderWidth: 2, borderColor: '#fff',
+        hoverOffset: 6,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '62%',
+      plugins: {
+        legend: { position: 'right' },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': ' + fmt(ctx.raw) + ' (' + ((ctx.raw/25350)*100).toFixed(1) + '%)' } }
+      }
+    }
+  });
+
+  // ── Carriers: Avg cost bar ──
+  charts.carrierAvg = new Chart(document.getElementById('chart-carrier-avg'), {
+    type: 'bar',
+    data: {
+      labels: ['AusPost', 'Couriers Please', 'Aramex', 'FG Benchmark'],
+      datasets: [{
+        label: 'Avg cost / con.',
+        data: [21.34, 17.94, 19.98, 16.40],
+        backgroundColor: ['#c8102e', '#d97706', '#c2410c', '#43a047'],
+        borderRadius: 5,
+        barThickness: 36,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + fmtDec(ctx.raw) } } },
+      scales: {
+        y: { ticks: { callback: v => '$' + v.toFixed(0) }, grid: { color: '#f0f0f0' }, min: 12 },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── Carriers: Volume bar ──
+  charts.carrierVol = new Chart(document.getElementById('chart-carrier-vol'), {
+    type: 'bar',
+    data: {
+      labels: ['AusPost', 'Couriers Please', 'Aramex'],
+      datasets: [{
+        label: 'Consignments',
+        data: [760, 420, 80],
+        backgroundColor: ['rgba(200,16,46,.8)', 'rgba(217,119,6,.8)', 'rgba(194,65,12,.8)'],
+        borderRadius: 5,
+        barThickness: 42,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { grid: { color: '#f0f0f0' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── Carriers: Charge type stacked ──
+  charts.chargeType = new Chart(document.getElementById('chart-charge-type'), {
+    type: 'bar',
+    data: {
+      labels: ['AusPost', 'Couriers Please', 'Aramex'],
+      datasets: [
+        { label: 'Base freight', data: [12460, 6090, 1260], backgroundColor: 'rgba(67,160,71,.8)', borderRadius: 0 },
+        { label: 'DIM surcharge', data: [2180, 840, 220],   backgroundColor: 'rgba(239,83,80,.8)', borderRadius: 0 },
+        { label: 'Residential',   data: [930, 0, 0],         backgroundColor: 'rgba(255,167,38,.8)', borderRadius: 0 },
+        { label: 'Fuel levy',     data: [645, 607, 118],     backgroundColor: 'rgba(120,144,156,.8)', borderRadius: { topLeft: 4, topRight: 4 } },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + fmt(ctx.raw) } } },
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#f0f0f0' } }
+      }
+    }
+  });
+
+  // ── Geography: State spend ──
+  charts.stateSpend = new Chart(document.getElementById('chart-state-spend'), {
+    type: 'bar',
+    data: {
+      labels: DATA.states.labels,
+      datasets: [{
+        label: 'Freight spend',
+        data: DATA.states.spend,
+        backgroundColor: ['#1a3d1f','#2d6831','#43a047','#66bb6a','#a5d6a7','#c8e6c9'],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + fmt(ctx.raw) } } },
+      scales: {
+        x: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#f0f0f0' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── Geography: State cons ──
+  charts.stateCons = new Chart(document.getElementById('chart-state-cons'), {
+    type: 'bar',
+    data: {
+      labels: DATA.states.labels,
+      datasets: [{
+        label: 'Consignments',
+        data: DATA.states.cons,
+        backgroundColor: ['#1a3d1f','#2d6831','#43a047','#66bb6a','#a5d6a7','#c8e6c9'],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#f0f0f0' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── Geography: Zone donut ──
+  charts.zone = new Chart(document.getElementById('chart-zone'), {
+    type: 'doughnut',
+    data: {
+      labels: DATA.zone.labels,
+      datasets: [{
+        data: DATA.zone.cons,
+        backgroundColor: DATA.zone.colors,
+        borderWidth: 2, borderColor: '#fff',
+        hoverOffset: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '58%',
+      plugins: { legend: { position: 'right' }, tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': ' + ctx.raw + ' cons (' + ((ctx.raw/1260)*100).toFixed(0) + '%)' } } }
+    }
+  });
+
+  // ── Weight band ──
+  charts.weightBand = new Chart(document.getElementById('chart-weight-band'), {
+    type: 'bar',
+    data: {
+      labels: DATA.weightBands.labels,
+      datasets: [{
+        label: 'Consignments',
+        data: DATA.weightBands.all,
+        backgroundColor: '#43a047',
+        borderRadius: 5,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#f0f0f0' } }
+      }
+    }
+  });
+
+  // ── DIM rate bar ──
+  charts.dimRate = new Chart(document.getElementById('chart-dim-rate'), {
+    type: 'bar',
+    data: {
+      labels: ['AusPost', 'Couriers Please', 'Aramex', 'FG Benchmark'],
+      datasets: [{
+        label: '% billed on DIM weight',
+        data: [72, 58, 80, 48],
+        backgroundColor: ['rgba(200,16,46,.8)', 'rgba(217,119,6,.8)', 'rgba(194,65,12,.8)', 'rgba(67,160,71,.8)'],
+        borderRadius: 5,
+        barThickness: 36,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + ctx.raw + '%' } } },
+      scales: {
+        y: { ticks: { callback: v => v + '%' }, max: 100, grid: { color: '#f0f0f0' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── Free shipping stacked ──
+  charts.freeShipping = new Chart(document.getElementById('chart-free-shipping'), {
+    type: 'bar',
+    data: {
+      labels: DATA.freeShipping.bands,
+      datasets: [
+        { label: 'Free shipping', data: [0, 0, 490, 0, 0, 0], backgroundColor: 'rgba(211,47,47,.7)', borderRadius: 0 },
+        { label: 'Paid shipping', data: [85, 156, 0, 312, 134, 83], backgroundColor: 'rgba(67,160,71,.7)', borderRadius: { topLeft:4, topRight:4 } },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom' } },
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, grid: { color: '#f0f0f0' }, title: { display: true, text: 'Orders' } }
+      }
+    }
+  });
+
+  // ── Threshold model line ──
+  const thresholdPoints = [50,60,70,75,80,90,95,100,110,120,130,140,150];
+  charts.thresholdModel = new Chart(document.getElementById('chart-threshold-model'), {
+    type: 'line',
+    data: {
+      labels: thresholdPoints.map(v => '$' + v),
+      datasets: [{
+        label: 'Quarterly freight subsidy',
+        data: thresholdPoints.map(v => calcSubsidy(v)),
+        borderColor: '#c62828',
+        backgroundColor: 'rgba(198,40,40,.08)',
+        borderWidth: 2,
+        pointRadius: thresholdPoints.map(v => v === 75 ? 6 : 2),
+        pointBackgroundColor: thresholdPoints.map(v => v === 75 ? '#c62828' : '#c62828'),
+        fill: true, tension: .4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' Subsidy: ' + fmt(ctx.raw) + '/qtr' } } },
+      scales: {
+        y: { ticks: { callback: v => '$' + (v/1000).toFixed(1) + 'k' }, grid: { color: '#f0f0f0' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── Margin waterfall ──
+  charts.marginWaterfall = new Chart(document.getElementById('chart-margin-waterfall'), {
+    type: 'bar',
+    data: {
+      labels: ['Freight collected from customers', 'Freight cost (total)', 'Net freight loss / qtr'],
+      datasets: [{
+        label: 'AUD',
+        data: [5264, 25350, -20086],
+        backgroundColor: ['rgba(67,160,71,.8)', 'rgba(211,47,47,.8)', 'rgba(211,47,47,.4)'],
+        borderRadius: 5,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + fmt(Math.abs(ctx.raw)) } } },
+      scales: {
+        y: { ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#f0f0f0' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // Populate postcode table
+  const tbody = document.getElementById('postcode-table-body');
+  DATA.postcodes.forEach((p, i) => {
+    tbody.innerHTML += `<tr>
+      <td style="font-weight:700">${p.code}</td>
+      <td>${p.suburb}</td>
+      <td>${p.state}</td>
+      <td>${p.cons}</td>
+      <td>${fmt(p.spend)}</td>
+      <td>${fmtDec(p.avg)}</td>
+    </tr>`;
+  });
+}
+
+// ══════════════════════════════════════════
+// THRESHOLD MODELLER
+// ══════════════════════════════════════════
+// AOV distribution model: normal-ish around $94
+// Orders by AOV bucket (total 1260):
+const aovBuckets = [
+  { threshold: 50,  qualify: 0.92, subsidy: 11500 },
+  { threshold: 60,  qualify: 0.84, subsidy: 10490 },
+  { threshold: 70,  qualify: 0.72, subsidy: 8990  },
+  { threshold: 75,  qualify: 0.58, subsidy: 8220  }, // current
+  { threshold: 80,  qualify: 0.51, subsidy: 7270  },
+  { threshold: 90,  qualify: 0.44, subsidy: 6280  },
+  { threshold: 95,  qualify: 0.42, subsidy: 6120  }, // recommended
+  { threshold: 100, qualify: 0.38, subsidy: 5420  },
+  { threshold: 110, qualify: 0.30, subsidy: 4280  },
+  { threshold: 120, qualify: 0.24, subsidy: 3420  },
+  { threshold: 130, qualify: 0.19, subsidy: 2710  },
+  { threshold: 140, qualify: 0.15, subsidy: 2140  },
+  { threshold: 150, qualify: 0.11, subsidy: 1570  },
+];
+
+function calcSubsidy(threshold) {
+  const exact = aovBuckets.find(b => b.threshold === threshold);
+  if (exact) return exact.subsidy;
+  // Interpolate
+  const lower = aovBuckets.filter(b => b.threshold < threshold).pop();
+  const upper = aovBuckets.find(b => b.threshold > threshold);
+  if (!lower) return aovBuckets[0].subsidy;
+  if (!upper) return aovBuckets[aovBuckets.length-1].subsidy;
+  const t = (threshold - lower.threshold) / (upper.threshold - lower.threshold);
+  return Math.round(lower.subsidy + t * (upper.subsidy - lower.subsidy));
+}
+
+function calcQualifyPct(threshold) {
+  const exact = aovBuckets.find(b => b.threshold === threshold);
+  if (exact) return exact.qualify;
+  const lower = aovBuckets.filter(b => b.threshold < threshold).pop();
+  const upper = aovBuckets.find(b => b.threshold > threshold);
+  if (!lower) return aovBuckets[0].qualify;
+  if (!upper) return aovBuckets[aovBuckets.length-1].qualify;
+  const t = (threshold - lower.threshold) / (upper.threshold - lower.threshold);
+  return lower.qualify + t * (upper.qualify - lower.qualify);
+}
+
+document.getElementById('threshold-slider').addEventListener('input', function() {
+  const v = parseInt(this.value);
+  document.getElementById('threshold-display').textContent = '$' + v;
+  const subsidy = calcSubsidy(v);
+  const qualify = calcQualifyPct(v);
+  const saving = Math.max(0, 8220 - subsidy);
+  document.getElementById('impact-qualify').textContent = (qualify * 100).toFixed(0) + '%';
+  document.getElementById('impact-cost').textContent = fmt(subsidy);
+  document.getElementById('impact-saving').textContent = saving > 0 ? fmt(saving) : '$0';
+  // Update threshold model highlight
+  const thresholds = [50,60,70,75,80,90,95,100,110,120,130,140,150];
+  charts.thresholdModel.data.datasets[0].pointRadius = thresholds.map(t => t === v ? 7 : 2);
+  charts.thresholdModel.update('none');
+});
+
+// ══════════════════════════════════════════
+// CARRIER FILTER
+// ══════════════════════════════════════════
+document.querySelectorAll('.ls-chip').forEach(chip => {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('.ls-chip').forEach(c => c.classList.remove('active'));
+    this.classList.add('active');
+    activeCarrier = this.dataset.carrier;
+    updateChartsForCarrier(activeCarrier);
+    updateKPIsForCarrier(activeCarrier);
+  });
+});
+
+function updateKPIsForCarrier(carrier) {
+  const d = DATA.carriers[carrier];
+  document.getElementById('kpi-spend').textContent = fmt(d.spend);
+  document.getElementById('kpi-cons').textContent = d.cons.toLocaleString();
+  document.getElementById('kpi-avg').textContent = fmtDec(d.avg);
+}
+
+function updateChartsForCarrier(carrier) {
+  // Monthly trend
+  const monthlyData = carrier === 'all' ? DATA.monthly.all
+    : carrier === 'auspost' ? DATA.monthly.auspost
+    : carrier === 'cp' ? DATA.monthly.cp
+    : DATA.monthly.aramex;
+  const color = getCarrierColor(carrier);
+  charts.monthlyTrend.data.datasets[0].data = monthlyData;
+  charts.monthlyTrend.data.datasets[0].borderColor = color;
+  charts.monthlyTrend.data.datasets[0].backgroundColor = color.replace(')', ',.1)').replace('rgb', 'rgba');
+  charts.monthlyTrend.data.datasets[0].pointBackgroundColor = color;
+  charts.monthlyTrend.update();
+
+  // Weight band
+  const wbData = carrier === 'all' ? DATA.weightBands.all
+    : carrier === 'auspost' ? DATA.weightBands.auspost
+    : carrier === 'cp' ? DATA.weightBands.cp
+    : DATA.weightBands.aramex;
+  charts.weightBand.data.datasets[0].data = wbData;
+  charts.weightBand.data.datasets[0].backgroundColor = color;
+  charts.weightBand.update();
+
+  // Carrier donut — highlight selected
+  if (carrier !== 'all') {
+    const alphas = { auspost: ['rgba(200,16,46,1)','rgba(217,119,6,.2)','rgba(194,65,12,.2)'],
+                     cp:      ['rgba(200,16,46,.2)','rgba(217,119,6,1)','rgba(194,65,12,.2)'],
+                     aramex:  ['rgba(200,16,46,.2)','rgba(217,119,6,.2)','rgba(194,65,12,1)'] };
+    charts.carrierDonut.data.datasets[0].backgroundColor = alphas[carrier];
+  } else {
+    charts.carrierDonut.data.datasets[0].backgroundColor = ['#c8102e','#d97706','#c2410c'];
+  }
+  charts.carrierDonut.update();
+}
+
+// ══════════════════════════════════════════
+// PAGE TABS
+// ══════════════════════════════════════════
+document.querySelectorAll('.ls-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.ls-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.ls-page').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('page-' + this.dataset.page).classList.add('active');
+    // Resize charts on tab switch
+    Object.values(charts).forEach(c => { try { c.resize(); } catch(e){} });
+  });
+});
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', initCharts);
+</script>
+</body>
+</html>
