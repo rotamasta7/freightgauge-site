@@ -106,7 +106,7 @@
     .steps::before {
       content: '';
       position: absolute;
-      top: 28px; left: calc(16.66% + 16px); right: calc(16.66% + 16px);
+      top: 26px; left: calc(16.66% + 14px); right: calc(16.66% + 14px);
       height: 1px;
       background: var(--border);
     }
@@ -115,17 +115,17 @@
     }
     .step:last-child { padding-right: 0; }
     .step-num {
-      width: 56px; height: 56px;
+      width: 52px; height: 52px;
       border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--white);
+      background: var(--fg-dark);
       display: flex; align-items: center; justify-content: center;
       font-family: 'Instrument Serif', serif;
-      font-size: 22px;
-      color: var(--fg-dark);
+      font-size: 20px;
+      color: white;
       margin-bottom: 24px;
       position: relative;
       z-index: 1;
+      box-shadow: 0 2px 10px rgba(26,61,31,0.25);
     }
     .step h4 {
       font-family: 'DM Sans', sans-serif;
@@ -254,32 +254,31 @@
     .problem-list { border-top: 1px solid var(--border); }
     .problem-row {
       display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 40px;
-      align-items: start;
-      padding: 40px 0;
+      grid-template-columns: 64px 1fr;
+      gap: 28px;
+      align-items: center;
+      padding: 20px 0;
       border-bottom: 1px solid var(--border);
-      border-radius: 4px;
       transition: background 0.15s;
     }
     .problem-row:hover { background: var(--fg-xlight); }
     .problem-num-large {
       font-family: 'Instrument Serif', serif;
-      font-size: 64px;
+      font-size: 36px;
       color: var(--fg-dark);
       line-height: 1;
-      padding-top: 4px;
       letter-spacing: -1px;
+      text-align: right;
     }
     .problem-num-large span { color: var(--fg-dark); }
     .problem-row h4 {
       font-family: 'DM Sans', sans-serif;
       font-weight: 700;
-      font-size: 19px;
+      font-size: 17px;
       color: var(--fg-dark);
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
-    .problem-row p { font-size: 14.5px; line-height: 1.7; max-width: 640px; }
+    .problem-row p { font-size: 14px; line-height: 1.6; max-width: 640px; color: var(--ink-muted); margin: 0; }
 
     @media (max-width: 768px) {
       .hero { padding: 72px 0 64px; }
@@ -288,8 +287,8 @@
       .step { padding: 0; }
       .pricing-card { grid-template-columns: 1fr; padding: 36px 28px; gap: 32px; }
       .problem-list { border-top: none; }
-      .problem-row { grid-template-columns: 48px 1fr; gap: 20px; padding: 28px 0; }
-      .problem-num-large { font-size: 36px; }
+      .problem-row { grid-template-columns: 40px 1fr; gap: 16px; padding: 14px 0; }
+      .problem-num-large { font-size: 24px; }
     }
 
     /* ── DELIVERS GRID (What you get 2-col) ── */
@@ -357,16 +356,13 @@
         Independent freight analysis for Australian ecommerce. Clear findings, ranked action plan, 48–72 hour turnaround.
       </p>
       <div class="hero-actions fade-up fade-up-delay-2">
-        <a href="contact.html" class="btn btn-primary">Get your health check →</a>
-        <a href="services.html" class="btn btn-ghost">See what's included</a>
-      </div>
-      <div class="fade-up fade-up-delay-3" style="margin-top:16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
-        <a href="demo.html" class="btn" style="background:var(--fg-light); color:var(--fg-dark); border:1.5px solid var(--fg-acc); font-size:14px; padding:10px 22px; border-radius:8px; font-weight:600; display:inline-flex; align-items:center; gap:7px; text-decoration:none;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          Explore interactive demo
+        <a href="contact.html" class="btn btn-primary">Get your health check &rarr;</a>
+        <a href="demo.html" class="btn btn-ghost" style="display:inline-flex; align-items:center; gap:7px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Explore demo
         </a>
-        <span style="font-size:12px; color:var(--ink-faint);">No commitment &middot; From $499 &middot; <a href="services.html#sample" style="color:var(--ink-faint); text-decoration:underline;">sample pages</a></span>
       </div>
+      <p class="hero-note fade-up fade-up-delay-3">No ongoing commitment &middot; From $499 &middot; <a href="services.html" style="color:var(--ink-faint); text-decoration:underline;">see what&rsquo;s included</a></p>
     </div>
   </section>
 
@@ -500,21 +496,7 @@
     </div>
   </section>
 
-  <!-- IS FREIGHTGAUGE RIGHT FOR YOU -->
-  <section class="section" style="border-top: 1px solid var(--border); padding-bottom: 48px;">
-    <div class="container" style="max-width:640px;">
-      <div class="fade-up">
-        <div class="label label-muted" style="margin-bottom:16px;">Is it right for you?</div>
-        <h2 style="margin-bottom:20px;">FreightGauge works best if...</h2>
-        <ul class="check-list">
-          <li>You ship 50 or more parcels a month with at least one domestic carrier</li>
-          <li>You pay your own freight costs directly, not managed through a 3PL</li>
-          <li>You have access to your carrier invoices or a shipment export</li>
-          <li>You want to know exactly where your freight spend is going</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+
 
 
 
@@ -578,12 +560,25 @@
     <div class="footer-links">
       <a href="index.html">Home</a>
       <a href="services.html">Services</a>
+      <a href="demo.html">Demo</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
     </div>
+
     <div class="footer-copy">
-      © 2026 FreightGauge · ABN 76 311 805 648 · freightgauge.net · mitch@freightgauge.net
+      &copy; 2026 FreightGauge &middot; ABN 76 311 805 648 &middot; freightgauge.net &middot; mitch@freightgauge.net
     </div>
+  </div>
+  <div class="footer-sub">
+    <a href="services.html#faqs">FAQs</a>
+    <span class="footer-sub-dot">&middot;</span>
+    <a href="services.html#pricing">Pricing</a>
+    <span class="footer-sub-dot">&middot;</span>
+    <a href="services.html#analysis">What&rsquo;s analysed</a>
+    <span class="footer-sub-dot">&middot;</span>
+    <a href="demo.html">Demo</a>
+    <span class="footer-sub-dot">&middot;</span>
+    <a href="contact.html">Get started</a>
   </div>
 </footer>
 

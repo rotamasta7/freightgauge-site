@@ -77,6 +77,70 @@
       background: var(--fg-dark); color: var(--white); border-color: var(--fg-dark);
     }
     @media (max-width: 600px) { .section-nav { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; } }
+    /* ── DEMO EXPLORER CARDS ── */
+    .demo-explorer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding: 28px 24px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    .demo-explorer-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      background: var(--bg);
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .demo-explorer-card.active {
+      border-color: var(--fg-dark);
+      background: var(--fg-xlight);
+    }
+    .demo-explorer-card:not(.active) {
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+    }
+    .demo-explorer-card:not(.active):hover {
+      border-color: var(--fg-acc);
+      box-shadow: 0 4px 16px rgba(26,61,31,0.10);
+    }
+    .dec-icon {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    .dec-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg-acc);
+      margin-bottom: 6px;
+    }
+    .dec-label.muted { color: var(--ink-faint); }
+    .dec-title {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--fg-dark);
+      margin-bottom: 6px;
+    }
+    .dec-desc {
+      font-size: 13px;
+      color: var(--ink-muted);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .dec-action {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--fg-mid);
+    }
+    .demo-explorer-card.active .dec-action { color: var(--ink-faint); }
+    @media (max-width: 600px) {
+      .demo-explorer { grid-template-columns: 1fr; }
+    }
 
     /* ── SCROLL PROGRESS ── */
     .scroll-progress { position: fixed; top: var(--nav-h); left: 0; right: 0; height: 3px; z-index: 200; }
@@ -322,6 +386,24 @@
 </header>
 
 <div class="demo-wrap">
+
+  <!-- DEMO EXPLORER -->
+  <div class="demo-explorer">
+    <div class="demo-explorer-card active">
+      <div class="dec-icon">📄</div>
+      <div class="dec-label muted">Currently viewing</div>
+      <div class="dec-title">Sample Report</div>
+      <div class="dec-desc">Written findings, carrier comparison, ranked recommendations, and savings analysis for FG Styles Co.</div>
+      <div class="dec-action">&#x2193; Scroll to explore</div>
+    </div>
+    <a href="looker-demo.html" class="demo-explorer-card" style="text-decoration:none;">
+      <div class="dec-icon">📊</div>
+      <div class="dec-label">Interactive dashboard</div>
+      <div class="dec-title">Sample Dashboard</div>
+      <div class="dec-desc">Filterable Looker Studio dashboard. Drill into carriers, geography, and weight bands. Same data, fully interactive.</div>
+      <div class="dec-action">Open dashboard &rarr;</div>
+    </a>
+  </div>
 
   <!-- SECTION NAV -->
   <nav class="section-nav" id="snav">
@@ -793,7 +875,13 @@
   FreightGauge &middot; ABN 76 311 805 648 &middot;
   <a href="index.html" style="color:var(--ink-faint);">Home</a> &middot;
   <a href="services.html" style="color:var(--ink-faint);">Services</a> &middot;
+  <a href="about.html" style="color:var(--ink-faint);">About</a> &middot;
   <a href="contact.html" style="color:var(--ink-faint);">Contact</a>
+  <br><span style="margin-top:8px; display:block;">
+  <a href="services.html#faqs" style="color:var(--ink-faint);">FAQs</a> &middot;
+  <a href="services.html#pricing" style="color:var(--ink-faint);">Pricing</a> &middot;
+  <a href="services.html#analysis" style="color:var(--ink-faint);">What&rsquo;s analysed</a>
+  </span>
 </div>
 
 <script>
