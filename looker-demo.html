@@ -150,7 +150,8 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
 .chart-wrap canvas { width: 100% !important; }
 
 /* ── TABLE ── */
-.ls-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.ls-table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 480px; }
 .ls-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--ink-faint); padding: 6px 10px; border-bottom: 1.5px solid var(--border); }
 .ls-table th:not(:first-child) { text-align: right; }
 .ls-table td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; color: var(--ink); }
@@ -247,6 +248,18 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
   .anomaly-grid { grid-template-columns: repeat(2, 1fr); }
   .impact-panel { grid-template-columns: repeat(3, 1fr); }
   .ls-header-right .ls-updated { display: none; }
+  .health-scorecard { grid-template-columns: 1fr; }
+  .ls-table { font-size: 11.5px; }
+  .ls-table th, .ls-table td { padding: 6px 7px; }
+  .ls-header-left .ls-report-title { display: none; }
+  .ls-chips { flex-wrap: wrap; gap: 6px; }
+}
+@media (max-width: 480px) {
+  .ls-row-4 { grid-template-columns: 1fr 1fr; }
+  .anomaly-grid { grid-template-columns: 1fr; }
+  .impact-panel { grid-template-columns: repeat(2, 1fr); }
+  .kpi-val { font-size: 1.5rem; }
+  .card { padding: 12px 14px; }
 }
 
 /* ── CARRIER HEALTH TAB ── */
@@ -299,7 +312,7 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
   <button class="ls-tab active" data-page="overview">Overview</button>
   <button class="ls-tab" data-page="carriers">Carriers</button>
   <button class="ls-tab" data-page="geography">Geography</button>
-  <button class="ls-tab" data-page="weight">Weight &amp; DIM</button>
+  <button class="ls-tab" data-page="weight">Weight &amp; Volume</button>
   <button class="ls-tab" data-page="margin">Shipping Margin</button>
   <button class="ls-tab" data-page="health">Carrier Health</button>
 </div>
@@ -365,6 +378,7 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
 
   <div class="card">
     <div class="card-title">Carrier Summary</div>
+    <div class="table-scroll">
     <table class="ls-table">
       <thead>
         <tr>
@@ -374,7 +388,7 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
           <th>Total Spend</th>
           <th>Avg / Con.</th>
           <th><span class="th-tip" data-tip="Avg cost vs AU carrier benchmark (460k+ orders, Q1 2026)">vs Benchmark</span></th>
-          <th><span class="th-tip" data-tip="% of consignments billed on dimensional weight, not actual weight">DIM Rate</span></th>
+          <th><span class="th-tip" data-tip="% of consignments billed on volumetric weight, not actual weight">Vol. Rate</span></th>
         </tr>
       </thead>
       <tbody>
@@ -404,6 +418,7 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 
   <div class="alt-panel" style="border-left: 4px solid var(--fg-dark); background: #f5f9f5;">
@@ -411,7 +426,7 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
       &#128100;&nbsp; Mitch's Take
     </div>
     <div style="font-size:13px; color:var(--ink); line-height:1.7; display:flex; flex-direction:column; gap:10px;">
-      <p style="margin:0;"><strong>The DIM rate is the standout finding.</strong> 71% of consignments billed on dimensional weight against a 48% AU benchmark is one of the higher gaps I've seen. This almost always traces back to packaging that hasn't been reviewed since launch. Standardising to 2-3 box sizes mapped to your actual product weights typically closes most of this within a month and it makes every other cost metric look better in the process.</p>
+      <p style="margin:0;"><strong>The volumetric billing rate is the standout finding.</strong> 71% of consignments billed on volumetric weight against a 48% AU benchmark is one of the higher gaps I've seen. This almost always traces back to packaging that hasn't been reviewed since launch. Standardising to 2-3 box sizes mapped to your actual product weights typically closes most of this within a month and it makes every other cost metric look better in the process.</p>
       <p style="margin:0;"><strong>AusPost is carrying too much at too high a price.</strong> At 60% of volume and $21.34/consignment, it's covering routes where CP or Aramex would cost $3-5 less per parcel. The routing rules adjustment is low-effort and I'd action that before any carrier negotiation conversation.</p>
       <p style="margin:0;"><strong>The Uber Direct opportunity is worth a proper look.</strong> 34% of orders landing within 15km of the Alexandria warehouse is a density you can monetise. At $6.50-9.00/consignment versus $18-22 AusPost metro, a 4-week pilot is low-risk and the savings are real if customer acceptance holds.</p>
     </div>
@@ -426,22 +441,22 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
       <div class="card-title" style="color: var(--ap-red);">AusPost</div>
       <div class="kpi-value">760 <span style="font-size:14px; font-weight:400; color:var(--ink-faint)">cons</span></div>
       <div style="margin: 6px 0; font-size:22px; font-weight:800; color:var(--ink)">$16,215</div>
-      <div class="kpi-sub">$21.34 avg &middot; 72% DIM billed</div>
+      <div class="kpi-sub">$21.34 avg &middot; 72% vol. billed</div>
       <div class="kpi-delta down" style="margin-top:8px">22% above CP for same zones</div>
     </div>
     <div class="card" style="border-top: 3px solid var(--cp-yellow);">
       <div class="card-title" style="color: var(--cp-yellow);">Couriers Please</div>
       <div class="kpi-value">420 <span style="font-size:14px; font-weight:400; color:var(--ink-faint)">cons</span></div>
       <div style="margin: 6px 0; font-size:22px; font-weight:800; color:var(--ink)">$7,537</div>
-      <div class="kpi-sub">$17.94 avg &middot; 58% DIM billed</div>
+      <div class="kpi-sub">$17.94 avg &middot; 58% vol. billed</div>
       <div class="kpi-delta up" style="margin-top:8px">Best avg rate of active carriers</div>
     </div>
     <div class="card" style="border-top: 3px solid var(--ax-orange);">
       <div class="card-title" style="color: var(--ax-orange);">Aramex</div>
       <div class="kpi-value">80 <span style="font-size:14px; font-weight:400; color:var(--ink-faint)">cons</span></div>
       <div style="margin: 6px 0; font-size:22px; font-weight:800; color:var(--ink)">$1,598</div>
-      <div class="kpi-sub">$19.98 avg &middot; 80% DIM billed</div>
-      <div class="kpi-delta warn" style="margin-top:8px">Highest DIM rate of 3 carriers</div>
+      <div class="kpi-sub">$19.98 avg &middot; 80% vol. billed</div>
+      <div class="kpi-delta warn" style="margin-top:8px">Highest vol. rate of 3 carriers</div>
     </div>
   </div>
 
@@ -511,13 +526,15 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
     </div>
     <div class="card">
       <div class="card-title">Top 10 Postcodes by Freight Spend</div>
-      <table class="ls-table">
+      <div class="table-scroll">
+    <table class="ls-table">
         <thead>
           <tr><th>Postcode</th><th>Suburb</th><th>State</th><th>Cons.</th><th>Spend</th><th>Avg</th></tr>
         </thead>
         <tbody id="postcode-table-body">
         </tbody>
       </table>
+    </div>
     </div>
   </div>
 </div>
@@ -526,19 +543,19 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
 <div class="ls-page" id="page-weight">
   <div class="ls-row ls-row-4">
     <div class="card">
-      <div class="card-title">Overall DIM Rate</div>
+      <div class="card-title">Overall Vol. Rate</div>
       <div class="kpi-value red">71%</div>
-      <div class="kpi-sub">895 of 1,260 cons billed on DIM weight</div>
+      <div class="kpi-sub">895 of 1,260 cons billed on volumetric weight</div>
       <div class="kpi-delta down">AU benchmark: 48% (460k+ orders)</div>
     </div>
     <div class="card">
-      <div class="card-title">DIM vs Benchmark Gap</div>
+      <div class="card-title">Vol. vs Benchmark Gap</div>
       <div class="kpi-value red">+23 pts</div>
       <div class="kpi-sub">Above AU benchmark for this weight profile</div>
       <div class="kpi-delta down">Gap review included in report</div>
     </div>
     <div class="card">
-      <div class="card-title">Avg DIM Weight</div>
+      <div class="card-title">Avg Vol. Weight</div>
       <div class="kpi-value">1.42 kg</div>
       <div class="kpi-sub">Avg actual weight: 0.74 kg</div>
       <div class="kpi-delta warn">1.9x actual weight</div>
@@ -559,7 +576,7 @@ body { font-family: -apple-system, "Google Sans", Arial, sans-serif; background:
       </div>
     </div>
     <div class="card">
-      <div class="card-title">DIM Billing Rate by Carrier vs Benchmark</div>
+      <div class="card-title">Vol. Billing Rate by Carrier vs Benchmark</div>
       <div class="chart-wrap" style="height:220px">
         <canvas id="chart-dim-rate"></canvas>
       </div>
@@ -876,7 +893,7 @@ const DATA = {
     aramex:  [17,  22,  24,  14,   3],
   },
   chargeTypes: {
-    labels: ['Base freight', 'DIM surcharge', 'Residential', 'Fuel levy'],
+    labels: ['Base freight', 'Vol. surcharge', 'Residential', 'Fuel levy'],
     auspost: [12460, 2180, 930, 645],
     cp:      [6090,  840,  0,   607],
     aramex:  [1260,  220,  0,   118],
@@ -1040,7 +1057,7 @@ function initCharts() {
       labels: ['AusPost', 'Couriers Please', 'Aramex'],
       datasets: [
         { label: 'Base freight', data: [12460, 6090, 1260], backgroundColor: 'rgba(67,160,71,.8)',   borderRadius: 0 },
-        { label: 'DIM surcharge', data: [2180,  840,  220],  backgroundColor: 'rgba(239,83,80,.8)',   borderRadius: 0 },
+        { label: 'Vol. surcharge', data: [2180,  840,  220],  backgroundColor: 'rgba(239,83,80,.8)',   borderRadius: 0 },
         { label: 'Residential',   data: [930,    0,    0],   backgroundColor: 'rgba(255,167,38,.8)',  borderRadius: 0 },
         { label: 'Fuel levy',     data: [645,   607,  118],  backgroundColor: 'rgba(120,144,156,.8)', borderRadius: { topLeft: 4, topRight: 4 } },
       ]
@@ -1148,7 +1165,7 @@ function initCharts() {
     data: {
       labels: ['AusPost', 'Couriers Please', 'Aramex', 'AU benchmark'],
       datasets: [{
-        label: '% billed on DIM weight',
+        label: '% billed on vol. weight',
         data: [72, 58, 80, 48],
         backgroundColor: ['rgba(200,16,46,.85)', 'rgba(217,119,6,.85)', 'rgba(194,65,12,.85)', 'rgba(67,160,71,.85)'],
         borderRadius: 5,

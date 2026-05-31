@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Interactive Demo — FreightGauge</title>
-  <meta name="description" content="A live FreightGauge analysis for FG Styles Co. — interactive carrier charts, dimensional billing data, and ranked recommendations.">
+  <meta name="description" content="A live FreightGauge analysis for FG Styles Co. — interactive carrier charts, volumetric billing data, and ranked recommendations.">
   <link rel="icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
@@ -51,14 +51,14 @@
     }
 
     /* ── LAYOUT ── */
-    .demo-wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px 80px; }
+    .demo-wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px 80px; overflow-x: hidden; }
     .demo-section { margin-top: 60px; }
     .d-label { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--fg-acc); margin-bottom: 6px; }
     .d-title { font-family: 'Instrument Serif', serif; font-size: clamp(1.4rem, 2.8vw, 2rem); color: var(--fg-dark); margin-bottom: 4px; line-height: 1.2; }
     .d-sub { color: var(--ink-muted); font-size: .875rem; }
 
     /* ── PANEL ── */
-    .panel { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 24px 24px 20px; margin-top: 16px; }
+    .panel { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 24px 24px 20px; margin-top: 16px; overflow: hidden; }
 
     /* ── SECTION NAV ── */
     .section-nav {
@@ -199,6 +199,9 @@
       opacity: 0; transform: translateY(3px); transition: opacity .2s, transform .2s;
     }
     .carrier-card:hover .carrier-insight { opacity: 1; transform: none; }
+    @media (hover: none) {
+      .carrier-insight { opacity: 1; transform: none; }
+    }
 
     /* ── CARRIER ALTERNATIVES ── */
     .alt-panel {
@@ -241,6 +244,7 @@
     .dim-note { text-align: center; font-size: .83rem; color: var(--ink-muted); margin-top: 14px; padding: 11px 18px; background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; max-width: 440px; margin-left: auto; margin-right: auto; }
     .dim-note strong { color: #c45400; }
     .weight-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+    @media (max-width: 420px) { .weight-row { grid-template-columns: 1fr; } }
     .weight-box { background: var(--fg-xlight); border-radius: 10px; padding: 16px; text-align: center; }
     .weight-lbl { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-muted); margin-bottom: 6px; }
     .weight-val { font-family: 'Instrument Serif', serif; font-size: 2.1rem; color: var(--fg-dark); line-height: 1; }
@@ -251,7 +255,7 @@
     .sub-bar-wrap { margin: 14px 0 16px; background: var(--fg-xlight); border-radius: 7px; height: 44px; overflow: hidden; }
     .sub-fill { height: 100%; background: linear-gradient(90deg, var(--fg-acc), var(--fg-mid)); border-radius: 7px; width: 0; transition: width 1.4s cubic-bezier(.4,0,.2,1); display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; }
     .sub-pct { font-size: .85rem; font-weight: 700; color: #fff; }
-    .sub-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 14px; }
+    .sub-meta { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
     .sm-lbl { font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-faint); }
     .sm-val { font-family: 'Instrument Serif', serif; font-size: 1.3rem; color: var(--fg-dark); }
 
@@ -410,7 +414,7 @@
     <a href="#overview" class="active">Overview</a>
     <a href="#carriers">Carriers</a>
     <a href="#cost">Cost breakdown</a>
-    <a href="#dim">DIM billing</a>
+    <a href="#dim">Vol. billing</a>
     <a href="#freeshipping">Free shipping</a>
     <a href="#savings">Savings</a>
     <a href="#recommendations">Recommendations</a>
@@ -577,7 +581,7 @@
 
   <!-- DIM BILLING -->
   <section id="dim" class="demo-section">
-    <div class="d-label">Dimensional billing</div>
+    <div class="d-label">Volumetric billing</div>
     <div class="d-title">71% of parcels billing on volume, not weight</div>
     <div class="d-sub">Carriers charge whichever is higher: actual weight or volumetric weight. FG Styles Co. is significantly above FreightGauge benchmark.</div>
     <div class="panel fade-up">
@@ -698,7 +702,7 @@
           </div>
         </div>
         <div class="rec-body"><div class="rec-body-inner">
-          <div class="rec-finding">71% of consignments on volumetric billing. Top 12 SKUs are over-packaged &mdash; dead weight 0.68 kg, chargeable 1.24 kg. Addressing these covers 64% of total DIM exposure.</div>
+          <div class="rec-finding">71% of consignments on volumetric billing. Top 12 SKUs are over-packaged &mdash; dead weight 0.68 kg, chargeable 1.24 kg. Addressing these covers 64% of total volumetric exposure.</div>
           <div class="rec-actions">
             <div class="rec-action">Audit carton dims for top 12 SKUs against AusPost cubic weight calculator</div>
             <div class="rec-action">Target chargeable weight within 15% of dead weight</div>
